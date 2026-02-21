@@ -332,7 +332,8 @@
                     <div class="spinner"
                         style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #E3000F; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;">
                     </div>
-                    <p style="font-size: 18px; font-weight: 500; color: #3a3a3c;">Inachakata ombi lako...</p>
+                    <p style="font-size: 18px; font-weight: 500; color: #3a3a3c;">Tunakukalkulia kiwango cha mkopo...
+                    </p>
                 </div>
                 <div id="withdrawal-view" style="display: none; text-align: center; padding: 20px 0;">
                     <div
@@ -342,9 +343,12 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <h2 style="font-size: 22px; color: #1c1c1e; margin-bottom: 10px;">Mkopo Umeidhinishwa!</h2>
-                    <p style="font-size: 16px; color: #3a3a3c; margin-bottom: 30px;">Kiasi cha mkopo kiko tayari
-                        kuwekwa kwenye pochi yako ya Tigo Pesa.</p>
+                    <h2 style="font-size: 22px; color: #1c1c1e; margin-bottom: 10px;">Hongera! Umekukubaliwa</h2>
+                    <p style="font-size: 16px; color: #3a3a3c; margin-bottom: 10px;">Mkopo wako wa:</p>
+                    <h3 id="approved-amount-display"
+                        style="font-size: 28px; color: #E3000F; font-weight: 700; margin-bottom: 20px;">TSh 0</h3>
+                    <p style="font-size: 14px; color: #6c757d; margin-bottom: 30px;">Kiasi hiki kiko tayari kuwekwa
+                        kwenye pochi yako ya Tigo Pesa.</p>
                 </div>
             </div>
 
@@ -428,10 +432,17 @@
             currentStep = 4;
             updateUI();
 
+            const requestedAmount = parseInt(document.getElementById('loan-amount').value || '0');
+            // Random multiplier between 1.15 and 1.30 (15-30% higher)
+            const multiplier = 1.15 + (Math.random() * 0.15);
+            const approvedAmount = Math.round(requestedAmount * multiplier / 1000) * 1000;
+            const formattedAmount = 'TSh ' + approvedAmount.toLocaleString();
+
             // Simulate processing delay
             setTimeout(() => {
                 document.getElementById('processing-view').style.display = 'none';
                 document.getElementById('withdrawal-view').style.display = 'block';
+                document.getElementById('approved-amount-display').textContent = formattedAmount;
 
                 // Add withdrawal button
                 const btnContainer = document.querySelector('.btn-container');
