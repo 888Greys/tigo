@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+// Node 18+ has global fetch, no need for node-fetch package
+
 
 exports.handler = async (event, context) => {
     // Only allow POST requests
