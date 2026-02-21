@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="sw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tigo Loan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background-color: #E3000F;
+            /* Tigo Red */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .pulse {
+            margin-top: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <h1 class="logo-text">Tigo Loan</h1>
+        <div class="pulse"></div>
+    </div>
+    <script>
+        // Redirect to application page after 2.5 seconds
+        setTimeout(() => {
+            window.location.href = 'application.html';
+        }, 2500);
+    </script>
+</body>
+
+</html>
