@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loan Calculator - Tigo Loan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            background-color: #E3000F;
+            color: white;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 15px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .calculator-card {
+            margin: -30px 20px 24px 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            z-index: 10;
+        }
+
+        .calculator-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .label-row label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .value-display {
+            font-size: 18px;
+            font-weight: 700;
+            color: #E3000F;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #e5e5ea;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #E3000F;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(227, 0, 15, 0.3);
+        }
+
+        .range-limits {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #8e8e93;
+        }
+
+        .result-box {
+            background-color: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1c1c1e;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #E3000F;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .apply-btn:active {
+            transform: scale(0.98);
+            background-color: #c8000d;
+        }
+
+        .features {
+            padding: 0 24px 40px 24px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #fff1f2;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        .feature-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 2px;
+        }
+
+        .feature-info p {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calculator-card,
+        .feature-item {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="hero">
+            <h1>Get Your Loan Approved Fast</h1>
+            <p>Quick approval • Competitive rates • Flexible terms</p>
+        </header>
+
+        <section class="calculator-card">
+            <h2 class="calculator-header">Loan Calculator</h2>
+
+            <div class="input-group">
+                <div class="label-row">
+                    <label>Loan Amount</label>
+                    <span class="value-display" id="amount-val">$5,000</span>
+                </div>
+                <input type="range" id="amount-range" min="100" max="5000" step="100" value="5000">
+                <div class="range-limits">
+                    <span>$100</span>
+                    <span>$5,000</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="label-row">
+                    <label>Loan Term</label>
+                    <span class="value-display" id="term-val">12 months</span>
+                </div>
+                <input type="range" id="term-range" min="6" max="60" step="6" value="12">
+                <div class="range-limits">
+                    <span>6 months</span>
+                    <span>60 months</span>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <p class="result-label">Monthly Payment</p>
+                <p class="result-value" id="monthly-payment">$434.94</p>
+            </div>
+
+            <button class="apply-btn" onclick="window.location.href='application.html'">APPLY NOW</button>
+        </section>
+
+        <section class="features">
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-info">
+                    <h3>Fast Approval</h3>
+                    <p>Within 24 hours</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">💰</div>
+                <div class="feature-info">
+                    <h3>Low Rates</h3>
+                    <p>From 8% per annum</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-info">
+                    <h3>Secure</h3>
+                    <p>Bank-level encryption</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const amountRange = document.getElementById('amount-range');
+        const termRange = document.getElementById('term-range');
+        const amountVal = document.getElementById('amount-val');
+        const termVal = document.getElementById('term-val');
+        const monthlyPayment = document.getElementById('monthly-payment');
+
+        function calculatePayment() {
+            const amount = parseFloat(amountRange.value);
+            const term = parseInt(termRange.value);
+            const annualRate = 0.08; // 8% interest rate
+            const monthlyRate = annualRate / 12;
+
+            // Formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+            const payment = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+
+            amountVal.textContent = `$${amount.toLocaleString()}`;
+            termVal.textContent = `${term} months`;
+            monthlyPayment.textContent = `$${payment.toFixed(2)}`;
+        }
+
+        amountRange.addEventListener('input', calculatePayment);
+        termRange.addEventListener('input', calculatePayment);
+
+        // Initial calculation
+        calculatePayment();
+    </script>
+</body>
+
+</html>
