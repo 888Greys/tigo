@@ -39,6 +39,7 @@
             <div class="input-group">
                 <label for="phone">Namba ya simu</label>
                 <div class="phone-input-wrapper">
+                    <span class="country-prefix">+255</span>
                     <input type="tel" id="app-phone" class="phone-input" placeholder="Weka namba yako" pattern="[0-9]*"
                         inputmode="numeric">
                 </div>
@@ -49,7 +50,7 @@
     </div>
     <style>
         .phone-input {
-            width: 100%;
+            flex: 1;
             border: none;
             background: transparent;
             font-size: 24px;
@@ -57,12 +58,22 @@
             color: #1c1c1e;
             padding: 10px 0;
             outline: none;
-            text-align: center;
+        }
+
+        .country-prefix {
+            font-size: 24px;
+            font-weight: 500;
+            color: #1c1c1e;
+            padding: 10px 0;
+            margin-right: 10px;
         }
 
         .phone-input-wrapper {
+            display: flex;
+            align-items: center;
             border-bottom: 2px solid #E3000F;
             margin-bottom: 20px;
+            padding: 0 10px;
         }
 
         .confirm-button {
