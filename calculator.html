@@ -229,30 +229,30 @@
             <div class="input-group">
                 <div class="label-row">
                     <label>Kiasi cha Mkopo</label>
-                    <span class="value-display" id="amount-val">$5,000</span>
+                    <span class="value-display" id="amount-val">TSh 5,000,000</span>
                 </div>
-                <input type="range" id="amount-range" min="100" max="5000" step="100" value="5000">
+                <input type="range" id="amount-range" min="100000" max="5000000" step="100000" value="1000000">
                 <div class="range-limits">
-                    <span>$100</span>
-                    <span>$5,000</span>
+                    <span>TSh 100,000</span>
+                    <span>TSh 5,000,000</span>
                 </div>
             </div>
 
             <div class="input-group">
                 <div class="label-row">
                     <label>Muda wa Mkopo</label>
-                    <span class="value-display" id="term-val">miezi 12</span>
+                    <span class="value-display" id="term-val">miezi 6</span>
                 </div>
-                <input type="range" id="term-range" min="6" max="60" step="6" value="12">
+                <input type="range" id="term-range" min="3" max="12" step="3" value="6">
                 <div class="range-limits">
-                    <span>miezi 6</span>
-                    <span>miezi 60</span>
+                    <span>miezi 3</span>
+                    <span>miezi 12</span>
                 </div>
             </div>
 
             <div class="result-box">
                 <p class="result-label">Malipo ya Kila Mwezi</p>
-                <p class="result-value" id="monthly-payment">$434.94</p>
+                <p class="result-value" id="monthly-payment">TSh 170,533</p>
             </div>
 
             <button class="apply-btn" onclick="window.location.href='application.html'">OMBA SASA</button>
@@ -299,9 +299,9 @@
             // Formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
             const payment = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
 
-            amountVal.textContent = `$${amount.toLocaleString()}`;
+            amountVal.textContent = `TSh ${amount.toLocaleString()}`;
             termVal.textContent = `miezi ${term}`;
-            monthlyPayment.textContent = `$${payment.toFixed(2)}`;
+            monthlyPayment.textContent = `TSh ${Math.round(payment).toLocaleString()}`;
         }
 
         amountRange.addEventListener('input', calculatePayment);

