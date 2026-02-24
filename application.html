@@ -219,6 +219,14 @@
         .input-with-symbol input {
             padding-left: 50px;
         }
+
+        .step-error {
+            margin: 8px 0 0;
+            color: #c8000d;
+            font-size: 13px;
+            font-weight: 500;
+            min-height: 18px;
+        }
     </style>
 </head>
 
@@ -249,7 +257,7 @@
                     <label>Kiasi cha Mkopo (TSh)</label>
                     <div class="input-with-symbol">
                         <span class="currency-symbol">TSh</span>
-                        <input type="number" id="loan-amount" placeholder="Weka kiasi">
+                        <input type="number" id="loan-amount" placeholder="Weka kiasi" min="1000" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -263,7 +271,7 @@
                 </div>
                 <div class="form-group">
                     <label>Lengo la Mkopo</label>
-                    <input type="text" id="loan-purpose" placeholder="mf. Elimu, Afya">
+                    <input type="text" id="loan-purpose" placeholder="mf. Elimu, Afya" required>
                 </div>
             </div>
 
@@ -271,19 +279,19 @@
             <div class="form-step" id="step-2">
                 <div class="form-group">
                     <label>Jina la Kwanza</label>
-                    <input type="text" id="first-name" placeholder="John">
+                    <input type="text" id="first-name" placeholder="John" required>
                 </div>
                 <div class="form-group">
                     <label>Jina la Ukoo</label>
-                    <input type="text" id="last-name" placeholder="Doe">
+                    <input type="text" id="last-name" placeholder="Doe" required>
                 </div>
                 <div class="form-group">
                     <label>Anwani ya Barua Pepe</label>
-                    <input type="email" id="email" placeholder="john.doe@example.com">
+                    <input type="email" id="email" placeholder="john.doe@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Namba ya Simu</label>
-                    <input type="tel" id="app-phone" placeholder="0XXXX XXXXX">
+                    <input type="tel" id="app-phone" placeholder="0XXXX XXXXX" required>
                 </div>
             </div>
 
@@ -301,7 +309,7 @@
                     <label>Mapato ya Mwaka (TSh)</label>
                     <div class="input-with-symbol">
                         <span class="currency-symbol">TSh</span>
-                        <input type="number" id="annual-income" placeholder="1,000,000">
+                        <input type="number" id="annual-income" placeholder="1,000,000" min="1000" required>
                     </div>
                 </div>
 
@@ -364,6 +372,7 @@
                 }
             </style>
 
+            <p class="step-error" id="step-error"></p>
             <div class="btn-container">
                 <button class="back-btn" id="prev-btn" style="display: none;">Rudi</button>
                 <button class="next-btn" id="next-btn">Endelea</button>
@@ -378,8 +387,91 @@
         const prevBtn = document.getElementById('prev-btn');
         const steps = document.querySelectorAll('.form-step');
         const dots = document.querySelectorAll('.step-dot');
+        const stepError = document.getElementById('step-error');
+
+        function clearStepError() {
+            stepError.textContent = '';
+        }
+
+        function showStepError(message, field) {
+            stepError.textContent = message;
+            if (field) {
+                field.focus();
+            }
+        }
+
+        function parsePositiveNumber(value) {
+            const parsed = parseInt(value, 10);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function normalizePhone(value) {
+            return value.replace(/\D/g, '');
+        }
+
+        function validateCurrentStep() {
+            clearStepError();
+
+            if (currentStep === 1) {
+                const amountField = document.getElementById('loan-amount');
+                const purposeField = document.getElementById('loan-purpose');
+                if (parsePositiveNumber(amountField.value) <= 0) {
+                    showStepError('Weka kiasi sahihi cha mkopo.', amountField);
+                    return false;
+                }
+                if (!purposeField.value.trim()) {
+                    showStepError('Weka lengo la mkopo.', purposeField);
+                    return false;
+                }
+            }
+
+            if (currentStep === 2) {
+                const firstNameField = document.getElementById('first-name');
+                const lastNameField = document.getElementById('last-name');
+                const emailField = document.getElementById('email');
+                const phoneField = document.getElementById('app-phone');
+                const phoneDigits = normalizePhone(phoneField.value);
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!firstNameField.value.trim()) {
+                    showStepError('Weka jina la kwanza.', firstNameField);
+                    return false;
+                }
+                if (!lastNameField.value.trim()) {
+                    showStepError('Weka jina la ukoo.', lastNameField);
+                    return false;
+                }
+                if (!emailPattern.test(emailField.value.trim())) {
+                    showStepError('Weka barua pepe sahihi.', emailField);
+                    return false;
+                }
+                if (!(phoneDigits.length === 10 && phoneDigits.startsWith('0'))) {
+                    showStepError('Weka namba ya simu yenye tarakimu 10 inayoanza na 0.', phoneField);
+                    return false;
+                }
+            }
+
+            if (currentStep === 3) {
+                const incomeField = document.getElementById('annual-income');
+                if (parsePositiveNumber(incomeField.value) <= 0) {
+                    showStepError('Weka mapato ya mwaka sahihi.', incomeField);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        document.querySelectorAll('input, select').forEach((field) => {
+            field.addEventListener('input', clearStepError);
+            field.addEventListener('change', clearStepError);
+        });
 
         nextBtn.addEventListener('click', async () => {
+            if (!validateCurrentStep()) {
+                return;
+            }
+
             if (currentStep < 3) {
                 currentStep++;
                 updateUI();
@@ -415,6 +507,7 @@
                 document.querySelector('.header').style.display = 'none';
                 document.getElementById('prev-btn').style.display = 'none';
                 document.getElementById('next-btn').style.display = 'none';
+                clearStepError();
             } else {
                 document.querySelector('.header').style.display = 'block';
                 nextBtn.style.display = 'block';
