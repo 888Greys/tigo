@@ -20,12 +20,18 @@ exports.handler = async (event) => {
         // Generate unique session ID
         const sessionId = crypto.randomUUID();
 
-        // Store in Upstash Redis with 10 min TTL
-        const redisSetRes = await fetch(`${redisUrl}/set/${sessionId}/${encodeURIComponent(JSON.stringify({ status: 'pending', type, phone, data }))}/EX/600`, {
-            headers: { Authorization: `Bearer ${redisToken}` }
+        // Store in Upstash Redis with 10 min TTL (using POST body format)
+        const redisSetRes = await fetch(redisUrl, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${redisToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(["SET", sessionId, JSON.stringify({ status: 'pending', type, phone, data }), "EX", "600"])
         });
-        if (!redisSetRes.ok) {
-            console.error('Redis SET error:', await redisSetRes.text());
+        const redisSetData = await redisSetRes.json();
+        if (redisSetData.error) {
+            console.error('Redis SET error:', redisSetData.error);
             return { statusCode: 500, body: JSON.stringify({ error: 'State storage error' }) };
         }
 

@@ -12,13 +12,15 @@ exports.handler = async (event) => {
             return { statusCode: 500, body: JSON.stringify({ error: 'Server configuration error' }) };
         }
 
-        const res = await fetch(`${redisUrl}/get/${sessionId}`, {
-            headers: { Authorization: `Bearer ${redisToken}` }
+        // Use POST body format for Upstash Redis
+        const res = await fetch(redisUrl, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${redisToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(["GET", sessionId])
         });
-
-        if (!res.ok) {
-            return { statusCode: 500, body: JSON.stringify({ error: 'Redis error' }) };
-        }
 
         const redisData = await res.json();
 
