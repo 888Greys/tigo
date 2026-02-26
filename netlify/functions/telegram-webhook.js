@@ -9,23 +9,30 @@ exports.handler = async (event) => {
         const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
         const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
 
+        console.log('Webhook received:', JSON.stringify(body).substring(0, 500));
+
         // Only handle callback_query (inline button presses)
         if (!body.callback_query) {
+            console.log('Not a callback_query, ignoring');
             return { statusCode: 200, body: 'OK' };
         }
 
         const callbackQuery = body.callback_query;
-        const callbackData = callbackQuery.data; // e.g. "approve_abc123" or "reject_abc123"
+        const callbackData = callbackQuery.data;
         const chatId = callbackQuery.message.chat.id;
         const messageId = callbackQuery.message.message_id;
 
+        console.log('Callback data:', callbackData);
+
         // Parse action and sessionId
         const underscoreIndex = callbackData.indexOf('_');
-        const action = callbackData.substring(0, underscoreIndex); // "approve" or "reject"
+        const action = callbackData.substring(0, underscoreIndex);
         const sessionId = callbackData.substring(underscoreIndex + 1);
 
-        // Get current session from Redis using POST format
-        const getRes = await fetch(`${redisUrl}`, {
+        console.log('Action:', action, 'SessionId:', sessionId);
+
+        // Get current session from Redis
+        const getRes = await fetch(redisUrl, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${redisToken}`,
@@ -34,23 +41,25 @@ exports.handler = async (event) => {
             body: JSON.stringify(["GET", sessionId])
         });
         const getData = await getRes.json();
+        console.log('Redis GET result:', JSON.stringify(getData));
 
         if (!getData.result) {
-            // Session expired
-            await answerCallback(botToken, callbackQuery.id, '⏰ Session expired');
+            console.log('Session not found or expired');
+            try { await answerCallback(botToken, callbackQuery.id, '⏰ Session expired'); } catch (e) { }
             return { statusCode: 200, body: 'OK' };
         }
 
         const session = JSON.parse(getData.result);
+        console.log('Current session status:', session.status);
 
         if (session.status !== 'pending') {
-            await answerCallback(botToken, callbackQuery.id, '⚠️ Already handled');
+            try { await answerCallback(botToken, callbackQuery.id, '⚠️ Already handled'); } catch (e) { }
             return { statusCode: 200, body: 'OK' };
         }
 
-        // Update status in Redis using POST format
+        // Update status in Redis
         session.status = action === 'approve' ? 'approved' : 'rejected';
-        const setRes = await fetch(`${redisUrl}`, {
+        const setRes = await fetch(redisUrl, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${redisToken}`,
@@ -59,19 +68,18 @@ exports.handler = async (event) => {
             body: JSON.stringify(["SET", sessionId, JSON.stringify(session), "EX", "600"])
         });
         const setData = await setRes.json();
+        console.log('Redis SET result:', JSON.stringify(setData));
 
-        if (setData.error) {
-            console.error('Redis SET error:', setData.error);
-        }
-
-        // Answer the callback query
+        // Answer the callback query (wrapped in try/catch so it doesn't break the flow)
         const statusEmoji = action === 'approve' ? '✅' : '❌';
         const statusText = action === 'approve' ? 'APPROVED' : 'REJECTED';
-        await answerCallback(botToken, callbackQuery.id, `${statusEmoji} ${statusText}`);
+        try {
+            await answerCallback(botToken, callbackQuery.id, `${statusEmoji} ${statusText}`);
+        } catch (e) {
+            console.error('answerCallback error:', e);
+        }
 
-        // Edit the original message to show the decision (remove buttons)
-        // Use editMessageReplyMarkup to remove buttons, then edit text without parse_mode
-        // to avoid HTML parsing issues with plain text
+        // Remove buttons and send reply
         try {
             await fetch(`https://api.telegram.org/bot${botToken}/editMessageReplyMarkup`, {
                 method: 'POST',
@@ -83,7 +91,6 @@ exports.handler = async (event) => {
                 })
             });
 
-            // Send a follow-up message with the decision
             await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -95,13 +102,13 @@ exports.handler = async (event) => {
             });
         } catch (editErr) {
             console.error('Edit message error:', editErr);
-            // Non-critical, don't fail the webhook
         }
 
+        console.log('Webhook completed successfully');
         return { statusCode: 200, body: 'OK' };
     } catch (error) {
         console.error('Webhook error:', error);
-        return { statusCode: 200, body: 'OK' }; // Always return 200 to Telegram
+        return { statusCode: 200, body: 'OK' };
     }
 };
 
