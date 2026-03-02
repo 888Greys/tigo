@@ -243,7 +243,7 @@
                         <span class="input-prefix">+255</span>
                         <input type="tel" 
                                id="phone" 
-                               placeholder="0XXXX XXXXX" 
+                               placeholder="0XXXXXXXXX" 
                                inputmode="numeric"
                                maxlength="10">
                     </div>
@@ -292,17 +292,10 @@
             const phone = phoneInput.value;
             const limit = parseInt(limitInput.value) || 0;
 
-            let isValid = true;
+            const phoneValid = phone.length === 10 || phone.length === 9;
+            const limitValid = limit > 0;
 
-            if (phone.length !== 10) {
-                isValid = false;
-            }
-
-            if (limit <= 0) {
-                isValid = false;
-            }
-
-            continueBtn.disabled = !isValid;
+            continueBtn.disabled = !(phoneValid && limitValid);
         }
 
         continueBtn.addEventListener('click', () => {
@@ -310,8 +303,8 @@
             const limit = parseInt(limitInput.value) || 0;
 
             // Validate phone
-            if (phone.length !== 10 || !phone.startsWith('0')) {
-                phoneError.textContent = 'Tafadhali weka namba ya simu sahihi yenye tarakimu 10.';
+            if (phone.length < 9 || phone.length > 10) {
+                phoneError.textContent = 'Tafadhali weka namba ya simu sahihi (tarakimu 9 au 10).';
                 phoneError.classList.add('show');
                 return;
             }
