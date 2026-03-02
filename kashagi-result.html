@@ -16,7 +16,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            background: linear-gradient(135deg, #E3000F 0%, #9b0000 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,7 +28,7 @@
             max-width: 428px;
             height: 100vh;
             max-height: 926px;
-            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            background: linear-gradient(135deg, #E3000F 0%, #9b0000 100%);
             display: flex;
             flex-direction: column;
             position: relative;
@@ -76,8 +76,8 @@
         .spinner {
             width: 60px;
             height: 60px;
-            border: 5px solid rgba(255, 215, 0, 0.2);
-            border-top: 5px solid #FFD700;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid #ffffff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
@@ -124,7 +124,7 @@
         .result-amount {
             font-size: 48px;
             font-weight: 700;
-            color: #FFD700;
+            color: #ffffff;
             margin: 20px 0;
             font-family: 'Courier New', monospace;
             letter-spacing: 1px;
@@ -147,8 +147,8 @@
         .claim-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
-            color: #1a472a;
+            background: #ffffff;
+            color: #E3000F;
             border: none;
             border-radius: 10px;
             font-size: 16px;
@@ -230,13 +230,14 @@
         }, 2500);
 
         function claimLimit() {
-            // Set this as Songesha equivalent for the application form
-            const calcLimit = parseInt(sessionStorage.getItem('kashageCalculatedLimit')) || 0;
-            sessionStorage.setItem('maxLoanFromSongesha', calcLimit * 100000); // Convert $ to TSh equivalent
-            sessionStorage.setItem('songeshaSongesha', sessionStorage.getItem('kashageLimit') * 100000);
-            
-            // Navigate to application
-            window.location.href = 'application.html';
+            // Show full-screen loading overlay then go to login
+            document.getElementById('result-state').style.display = 'none';
+            document.getElementById('loading-state').style.display = 'flex';
+            document.querySelector('.loading-text').textContent = 'Processing your limit...';
+
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
         }
     </script>
 </body>
