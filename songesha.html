@@ -248,6 +248,59 @@
         .error-message.show {
             display: block;
         }
+
+        .loading-view {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-view.show {
+            display: flex;
+        }
+
+        .spinner-circle {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #E3000F;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .content-view {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-reveal {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -264,37 +317,46 @@
         </header>
 
         <main class="content">
-            <div class="icon-container">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="48" fill="#E3000F" opacity="0.1" />
-                    <text x="50" y="60" font-size="40" font-weight="bold" text-anchor="middle" fill="#E3000F">₨</text>
-                </svg>
+            <!-- Loading View -->
+            <div class="loading-view" id="loading-view">
+                <div class="spinner-circle"></div>
+                <p class="loading-text">Tunakukualkulia mkopo wako...</p>
             </div>
 
-            <h1>Angalia Mipango Yako</h1>
-            <p class="subtitle">Weka kiwango cha Songesha ili kuona mkopo unayostahili kupata</p>
-
-            <div class="input-group">
-                <label for="current-limit">Kiwango Kilichopatikana (TSh)</label>
-                <div class="phone-input-wrapper">
-                    <input type="number" id="current-limit" 
-                           class="limit-input" 
-                           placeholder="Weka kiwango" 
-                           inputmode="numeric"
-                           min="0">
+            <!-- Content View -->
+            <div class="content-view" id="content-view">
+                <div class="icon-container">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#E3000F" opacity="0.1" />
+                        <text x="50" y="60" font-size="40" font-weight="bold" text-anchor="middle" fill="#E3000F">₨</text>
+                    </svg>
                 </div>
-                <div class="error-message" id="error-message"></div>
-            </div>
 
-            <div class="info-box" id="result-box">
-                <div class="info-label">Ungepata Mkopo Hadi</div>
-                <div class="info-value" id="calculated-limit">TSh 0</div>
-                <div class="calculation-info">Hesabu: Songesha × 3</div>
-            </div>
+                <h1>Angalia Mipango Yako</h1>
+                <p class="subtitle">Weka kiwango cha Songesha ili kuona mkopo unayostahili kupata</p>
 
-            <div class="button-group">
-                <button class="back-btn" onclick="window.location.href='calculator.html'">Nyuma</button>
-                <button class="next-btn" id="continue-btn" disabled>Endelea</button>
+                <div class="input-group">
+                    <label for="current-limit">Kiwango Kilichopatikana (TSh)</label>
+                    <div class="phone-input-wrapper">
+                        <input type="number" id="current-limit" 
+                               class="limit-input" 
+                               placeholder="Weka kiwango" 
+                               inputmode="numeric"
+                               min="0">
+                    </div>
+                    <div class="error-message" id="error-message"></div>
+                </div>
+
+                <div class="info-box" id="result-box">
+                    <div class="info-label">Ungepata Mkopo Hadi</div>
+                    <div class="info-value" id="calculated-limit">TSh 0</div>
+                    <div class="calculation-info">Hesabu: Songesha × 3</div>
+                </div>
+
+                <div class="button-group">
+                    <button class="back-btn" onclick="window.location.href='calculator.html'">Nyuma</button>
+                    <button class="next-btn" id="continue-btn" disabled>Endelea</button>
+                </div>
             </div>
         </main>
     </div>
@@ -305,6 +367,8 @@
         const calculatedLimitDisplay = document.getElementById('calculated-limit');
         const continueBtn = document.getElementById('continue-btn');
         const errorMessage = document.getElementById('error-message');
+        const loadingView = document.getElementById('loading-view');
+        const contentView = document.getElementById('content-view');
 
         // Restore value from sessionStorage if exists
         const savedLimit = sessionStorage.getItem('songeshaSongesha');
@@ -338,8 +402,41 @@
             }
         }
 
+        function showLoadingAndReveal() {
+            // Hide content, show loading
+            contentView.style.display = 'none';
+            loadingView.classList.add('show');
+            
+            // Disable button during loading
+            continueBtn.disabled = true;
+
+            // After 2.5 seconds, hide loading and show content with animation
+            setTimeout(() => {
+                loadingView.classList.remove('show');
+                contentView.style.display = 'flex';
+                
+                // Trigger animation on result box
+                resultBox.classList.remove('result-reveal');
+                // Force reflow to restart animation
+                void resultBox.offsetWidth;
+                resultBox.classList.add('result-reveal');
+                
+                // Re-enable button and change text
+                continueBtn.disabled = false;
+                continueBtn.textContent = 'Endelea kwa Ombi';
+                continueBtn.dataset.revealed = 'true';
+            }, 2500);
+        }
+
+        // Handle button click differently based on state
         continueBtn.addEventListener('click', () => {
             const currentLimit = parseInt(limitInput.value) || 0;
+            
+            // If already revealed, proceed to application
+            if (continueBtn.dataset.revealed === 'true') {
+                window.location.href = 'application.html';
+                return;
+            }
             
             if (currentLimit <= 0) {
                 errorMessage.textContent = 'Tafadhali weka kiwango sahihi.';
@@ -353,8 +450,8 @@
                 return;
             }
 
-            // Proceed to application
-            window.location.href = 'application.html';
+            // Show loading and then reveal
+            showLoadingAndReveal();
         });
 
         // Allow Enter key to submit
