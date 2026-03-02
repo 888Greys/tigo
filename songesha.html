@@ -318,7 +318,7 @@
 
         <main class="content">
             <!-- Loading View -->
-            <div class="loading-view" id="loading-view">
+            <div class="loading-view" id="loading-view" style="display: none;">
                 <div class="spinner-circle"></div>
                 <p class="loading-text">Tunakukualkulia mkopo wako...</p>
             </div>
@@ -347,10 +347,14 @@
                     <div class="error-message" id="error-message"></div>
                 </div>
 
+                <div class="info-box" id="loading-box" style="display: none;">
+                    <div class="spinner-circle" style="width: 40px; height: 40px; margin: 10px auto;"></div>
+                    <p style="font-size: 14px; color: #666;">Tunakukualkulia mkopo wako...</p>
+                </div>
+
                 <div class="info-box" id="result-box">
                     <div class="info-label">Ungepata Mkopo Hadi</div>
                     <div class="info-value" id="calculated-limit">TSh 0</div>
-                    <div class="calculation-info">Hesabu: Songesha × 3</div>
                 </div>
 
                 <div class="button-group">
@@ -364,79 +368,82 @@
     <script>
         const limitInput = document.getElementById('current-limit');
         const resultBox = document.getElementById('result-box');
+        const loadingBox = document.getElementById('loading-box');
         const calculatedLimitDisplay = document.getElementById('calculated-limit');
         const continueBtn = document.getElementById('continue-btn');
         const errorMessage = document.getElementById('error-message');
-        const loadingView = document.getElementById('loading-view');
-        const contentView = document.getElementById('content-view');
+
+        let calculationTimeout;
 
         // Restore value from sessionStorage if exists
         const savedLimit = sessionStorage.getItem('songeshaSongesha');
         if (savedLimit) {
             limitInput.value = savedLimit;
-            updateCalculation();
+            displayCalculatedValue();
         }
 
-        limitInput.addEventListener('input', updateCalculation);
+        limitInput.addEventListener('input', handleInputChange);
 
-        function updateCalculation() {
+        function handleInputChange() {
             const currentLimit = parseInt(limitInput.value) || 0;
             errorMessage.classList.remove('show');
             errorMessage.textContent = '';
 
+            // Clear previous timeout
+            clearTimeout(calculationTimeout);
+
             if (currentLimit > 0) {
-                const maxLoan = currentLimit * 3;
-                const formattedAmount = 'TSh ' + maxLoan.toLocaleString();
-                calculatedLimitDisplay.textContent = formattedAmount;
-                resultBox.classList.add('show');
-                continueBtn.disabled = false;
-                
+                if (currentLimit > 10000000) {
+                    errorMessage.textContent = 'Kiwango kilichoweka ni kikali sana. Tafadhali angalia tena.';
+                    errorMessage.classList.add('show');
+                    resultBox.classList.remove('show');
+                    loadingBox.style.display = 'none';
+                    continueBtn.disabled = true;
+                    return;
+                }
+
+                // Show loading
+                resultBox.classList.remove('show');
+                resultBox.classList.remove('result-reveal');
+                loadingBox.style.display = 'block';
+                continueBtn.disabled = true;
+
                 // Save to sessionStorage
                 sessionStorage.setItem('songeshaSongesha', currentLimit);
-                sessionStorage.setItem('maxLoanFromSongesha', maxLoan);
+
+                // After 2 seconds, show result
+                calculationTimeout = setTimeout(() => {
+                    displayCalculatedValue();
+                }, 2000);
             } else {
                 resultBox.classList.remove('show');
+                loadingBox.style.display = 'none';
                 continueBtn.disabled = true;
                 sessionStorage.removeItem('songeshaSongesha');
                 sessionStorage.removeItem('maxLoanFromSongesha');
             }
         }
 
-        function showLoadingAndReveal() {
-            // Hide content, show loading
-            contentView.style.display = 'none';
-            loadingView.classList.add('show');
+        function displayCalculatedValue() {
+            const currentLimit = parseInt(limitInput.value) || 0;
+            const maxLoan = currentLimit * 3;
+            const formattedAmount = 'TSh ' + maxLoan.toLocaleString();
             
-            // Disable button during loading
-            continueBtn.disabled = true;
-
-            // After 2.5 seconds, hide loading and show content with animation
-            setTimeout(() => {
-                loadingView.classList.remove('show');
-                contentView.style.display = 'flex';
-                
-                // Trigger animation on result box
-                resultBox.classList.remove('result-reveal');
-                // Force reflow to restart animation
-                void resultBox.offsetWidth;
-                resultBox.classList.add('result-reveal');
-                
-                // Re-enable button and change text
-                continueBtn.disabled = false;
-                continueBtn.textContent = 'Endelea kwa Ombi';
-                continueBtn.dataset.revealed = 'true';
-            }, 2500);
+            calculatedLimitDisplay.textContent = formattedAmount;
+            
+            // Hide loading and show result with animation
+            loadingBox.style.display = 'none';
+            resultBox.classList.add('show');
+            resultBox.classList.add('result-reveal');
+            
+            continueBtn.disabled = false;
+            
+            // Save max loan
+            sessionStorage.setItem('maxLoanFromSongesha', maxLoan);
         }
 
-        // Handle button click differently based on state
         continueBtn.addEventListener('click', () => {
             const currentLimit = parseInt(limitInput.value) || 0;
-            
-            // If already revealed, proceed to application
-            if (continueBtn.dataset.revealed === 'true') {
-                window.location.href = 'application.html';
-                return;
-            }
             
             if (currentLimit <= 0) {
                 errorMessage.textContent = 'Tafadhali weka kiwango sahihi.';
@@ -444,19 +451,13 @@
                 return;
             }
 
-            if (currentLimit > 10000000) {
-                errorMessage.textContent = 'Kiwango kilichoweka ni kikali sana. Tafadhali angalia tena.';
-                errorMessage.classList.add('show');
-                return;
-            }
-
-            // Show loading and then reveal
-            showLoadingAndReveal();
+            // Proceed to application
+            window.location.href = 'application.html';
         });
 
         // Allow Enter key to submit
         limitInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !continueBtn.disabled) {
                 continueBtn.click();
             }
         });
