@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Your Calculated Limit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .result-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .result-state.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 215, 0, 0.2);
+            border-top: 5px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .result-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .result-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: #FFD700;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .result-subtitle {
+            color: #ccc;
+            font-size: 13px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .claim-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+            color: #1a472a;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .claim-btn:active {
+            transform: translateY(2px);
+            opacity: 0.9;
+        }
+
+        .back-text-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: underline;
+            padding: 8px;
+        }
+
+        .back-text-btn:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="header">
+            🎄 Your Kashagi Limit Unlocked
+        </div>
+
+        <div class="content">
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <div class="spinner"></div>
+                <div class="loading-text">Calculating your new limit...</div>
+            </div>
+
+            <!-- Result State -->
+            <div class="result-state" id="result-state">
+                <div class="result-icon">✨</div>
+                <div class="result-title">Congratulations!</div>
+                <div style="color: #ccc; font-size: 13px; margin-bottom: 20px;">You're eligible for up to</div>
+                <div class="result-amount" id="result-amount">$0</div>
+                <div class="result-subtitle" id="result-info">
+                    Based on your current Kashagi limit, you can now borrow up to this amount instantly!
+                </div>
+
+                <div class="button-group" style="width: 100%;">
+                    <button class="claim-btn" onclick="claimLimit()">Claim My Limit Now →</button>
+                    <button class="back-text-btn" onclick="window.location.href='offer.html'">Maybe Later</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get stored values
+        const kashageLimit = parseInt(sessionStorage.getItem('kashageLimit')) || 0;
+        const userPhone = sessionStorage.getItem('userPhone') || '';
+
+        // Show loading for 2.5 seconds, then show result
+        setTimeout(() => {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('result-state').classList.add('show');
+            
+            // Calculate and display amount (×3 like Songesha)
+            const calculatedLimit = kashageLimit * 3;
+            document.getElementById('result-amount').textContent = '$' + calculatedLimit.toLocaleString();
+            
+            // Store calculated amount
+            sessionStorage.setItem('kashageCalculatedLimit', calculatedLimit);
+        }, 2500);
+
+        function claimLimit() {
+            // Set this as Songesha equivalent for the application form
+            const calcLimit = parseInt(sessionStorage.getItem('kashageCalculatedLimit')) || 0;
+            sessionStorage.setItem('maxLoanFromSongesha', calcLimit * 100000); // Convert $ to TSh equivalent
+            sessionStorage.setItem('songeshaSongesha', sessionStorage.getItem('kashageLimit') * 100000);
+            
+            // Navigate to application
+            window.location.href = 'application.html';
+        }
+    </script>
+</body>
+
+</html>

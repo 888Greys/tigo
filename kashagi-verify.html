@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verify Your Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 428px;
+            height: 100vh;
+            max-height: 926px;
+            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 8px;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .header-spacer {
+            width: 40px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .step-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .step-badge.active {
+            background-color: #FFD700;
+            color: #1a472a;
+            border-color: #FFD700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .input-prefix {
+            color: #999;
+            font-weight: 500;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        input[type="tel"],
+        input[type="number"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #555;
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .back-btn {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            background-color: transparent;
+            color: #FFD700;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:active {
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        .next-btn {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+            color: #1a472a;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .next-btn:active:not(:disabled) {
+            transform: translateY(2px);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="header">
+            <button class="back-button" onclick="window.location.href='offer.html'">←</button>
+            <div class="header-title">Verify Details</div>
+            <div class="header-spacer"></div>
+        </div>
+
+        <div class="content">
+            <h1>Verify Your Details</h1>
+            <p class="subtitle">We need your information to calculate your new limit</p>
+
+            <div class="step-indicator">
+                <div class="step-badge active">1</div>
+                <div class="step-badge">2</div>
+            </div>
+
+            <form id="verify-form">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">+255</span>
+                        <input type="tel" 
+                               id="phone" 
+                               placeholder="0XXXX XXXXX" 
+                               inputmode="numeric"
+                               maxlength="10">
+                    </div>
+                    <div class="error-message" id="phone-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="current-limit">Current Kashagi Limit</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" 
+                               id="current-limit" 
+                               placeholder="Enter amount" 
+                               inputmode="numeric">
+                    </div>
+                    <div class="error-message" id="limit-error"></div>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button class="back-btn" onclick="window.location.href='offer.html'">Back</button>
+                <button class="next-btn" id="continue-btn" disabled>Continue →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById('phone');
+        const limitInput = document.getElementById('current-limit');
+        const continueBtn = document.getElementById('continue-btn');
+        const phoneError = document.getElementById('phone-error');
+        const limitError = document.getElementById('limit-error');
+
+        // Format phone input
+        phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+            validateForm();
+        });
+
+        limitInput.addEventListener('input', validateForm);
+
+        function validateForm() {
+            phoneError.classList.remove('show');
+            limitError.classList.remove('show');
+
+            const phone = phoneInput.value;
+            const limit = parseInt(limitInput.value) || 0;
+
+            let isValid = true;
+
+            if (phone.length !== 10) {
+                isValid = false;
+            }
+
+            if (limit <= 0) {
+                isValid = false;
+            }
+
+            continueBtn.disabled = !isValid;
+        }
+
+        continueBtn.addEventListener('click', () => {
+            const phone = phoneInput.value;
+            const limit = parseInt(limitInput.value) || 0;
+
+            // Validate phone
+            if (phone.length !== 10 || !phone.startsWith('0')) {
+                phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+                phoneError.classList.add('show');
+                return;
+            }
+
+            // Validate limit
+            if (limit <= 0) {
+                limitError.textContent = 'Please enter your current Kashagi limit.';
+                limitError.classList.add('show');
+                return;
+            }
+
+            if (limit > 100000) {
+                limitError.textContent = 'The amount seems too high. Please verify.';
+                limitError.classList.add('show');
+                return;
+            }
+
+            // Store data and navigate
+            sessionStorage.setItem('userPhone', phone);
+            sessionStorage.setItem('kashageLimit', limit);
+            
+            window.location.href = 'kashagi-result.html';
+        });
+
+        // Allow Enter key
+        document.getElementById('verify-form').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                continueBtn.click();
+            }
+        });
+    </script>
+</body>
+
+</html>
