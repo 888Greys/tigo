@@ -331,6 +331,10 @@
                         <span class="summary-label">Mwombaji:</span>
                         <span class="summary-value" id="sum-name">-</span>
                     </div>
+                    <div class="summary-item" id="songesha-item" style="display: none; border-top: 1px solid #dee2e6; margin-top: 10px; padding-top: 10px;">
+                        <span class="summary-label">Kiwango cha Mkopo (Songesha):</span>
+                        <span class="summary-value" id="sum-max-loan">-</span>
+                    </div>
                 </div>
             </div>
 
@@ -419,6 +423,18 @@
                     showStepError('Weka kiasi sahihi cha mkopo.', amountField);
                     return false;
                 }
+                
+                // Validate against Songesha limit if available
+                const maxLoan = sessionStorage.getItem('maxLoanFromSongesha');
+                if (maxLoan) {
+                    const requestedAmount = parseInt(amountField.value) || 0;
+                    const maxAllowed = parseInt(maxLoan);
+                    if (requestedAmount > maxAllowed) {
+                        showStepError(`Kiasi cha mkopo hakiwezi kuzidi TSh ${maxAllowed.toLocaleString()} kulingana na kiwango chako cha Songesha.`, amountField);
+                        return false;
+                    }
+                }
+                
                 if (!purposeField.value.trim()) {
                     showStepError('Weka lengo la mkopo.', purposeField);
                     return false;
@@ -519,6 +535,14 @@
             document.getElementById('sum-term').textContent = document.getElementById('loan-term').value;
             document.getElementById('sum-purpose').textContent = document.getElementById('loan-purpose').value || '-';
             document.getElementById('sum-name').textContent = document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value;
+            
+            // Display Songesha information if available
+            const maxLoan = sessionStorage.getItem('maxLoanFromSongesha');
+            if (maxLoan) {
+                const formattedMax = 'TSh ' + parseInt(maxLoan).toLocaleString();
+                document.getElementById('sum-max-loan').textContent = formattedMax;
+                document.getElementById('songesha-item').style.display = 'flex';
+            }
         }
 
         async function submitApplication() {
