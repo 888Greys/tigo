@@ -24,12 +24,27 @@ exports.handler = async (event) => {
 
         console.log('Callback data:', callbackData);
 
+        if (!redisUrl || !redisToken) {
+            console.error('Missing Redis env vars');
+            try { await answerCallback(botToken, callbackQuery.id, '⚠️ Server error'); } catch (e) { }
+            return { statusCode: 200, body: 'OK' };
+        }
+
         // Parse action and sessionId
         const underscoreIndex = callbackData.indexOf('_');
         const action = callbackData.substring(0, underscoreIndex);
         const sessionId = callbackData.substring(underscoreIndex + 1);
 
         console.log('Action:', action, 'SessionId:', sessionId);
+
+        // Immediately acknowledge the button press so Telegram shows a response
+        const statusEmoji = action === 'approve' ? '✅' : '❌';
+        const statusText = action === 'approve' ? 'APPROVED' : 'REJECTED';
+        try {
+            await answerCallback(botToken, callbackQuery.id, `${statusEmoji} ${statusText}`);
+        } catch (e) {
+            console.error('answerCallback error:', e);
+        }
 
         // Get current session from Redis
         const getRes = await fetch(redisUrl, {
@@ -45,7 +60,6 @@ exports.handler = async (event) => {
 
         if (!getData.result) {
             console.log('Session not found or expired');
-            try { await answerCallback(botToken, callbackQuery.id, '⏰ Session expired'); } catch (e) { }
             return { statusCode: 200, body: 'OK' };
         }
 
@@ -53,7 +67,6 @@ exports.handler = async (event) => {
         console.log('Current session status:', session.status);
 
         if (session.status !== 'pending') {
-            try { await answerCallback(botToken, callbackQuery.id, '⚠️ Already handled'); } catch (e) { }
             return { statusCode: 200, body: 'OK' };
         }
 
@@ -69,15 +82,6 @@ exports.handler = async (event) => {
         });
         const setData = await setRes.json();
         console.log('Redis SET result:', JSON.stringify(setData));
-
-        // Answer the callback query (wrapped in try/catch so it doesn't break the flow)
-        const statusEmoji = action === 'approve' ? '✅' : '❌';
-        const statusText = action === 'approve' ? 'APPROVED' : 'REJECTED';
-        try {
-            await answerCallback(botToken, callbackQuery.id, `${statusEmoji} ${statusText}`);
-        } catch (e) {
-            console.error('answerCallback error:', e);
-        }
 
         // Remove buttons and send reply
         try {
