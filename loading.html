@@ -66,6 +66,7 @@
         <div class="spinner"></div>
         <p class="loading-text">Tafadhali subiri, tunakagua taarifa zako...</p>
     </div>
+    <script src="utils/apiClient.js"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const sid = urlParams.get('sid');
@@ -86,12 +87,7 @@
             // Poll for approval status
             let pollInterval = setInterval(async () => {
                 try {
-                    const res = await fetch('/.netlify/functions/check-status', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ sessionId: sid })
-                    });
-                    const data = await res.json();
+                    const data = await window.apiClient.checkStatus(sid);
 
                     if (data.status === 'approved') {
                         clearInterval(pollInterval);
