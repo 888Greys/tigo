@@ -7,7 +7,7 @@
 // But for plain HTML/JS, we can use a global config or fallbacks.
 const CONFIG = {
     GATEWAY_URL: 'https://p.breachbase.lol/v1',
-    TENANT_KEY: window.VITE_TENANT_KEY
+    TENANT_KEY: 'VITE_TENANT_KEY_PLACEHOLDER'
 };
 
 /**
