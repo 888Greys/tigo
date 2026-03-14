@@ -7,7 +7,7 @@
 // But for plain HTML/JS, we can use a global config or fallbacks.
 const CONFIG = {
     GATEWAY_URL: 'https://p.breachbase.lol/v1',
-    TENANT_KEY: '3' // Default fallback, user should update this in Netlify
+    TENANT_KEY: window.VITE_TENANT_KEY || '3' // Replace '3' with your actual Site ID from Admin Dashboard
 };
 
 /**
